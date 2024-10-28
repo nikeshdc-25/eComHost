@@ -5,7 +5,7 @@ function Message({ variant, children }) {
 }
 
 Message.defaultProps = {
-  variant: "primary",
+  variant: "warning",
 };
 
 export default Message;

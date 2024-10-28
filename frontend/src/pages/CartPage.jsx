@@ -1,10 +1,19 @@
-import { useState } from "react";
-import { Row, Col, ListGroup, Form, Image, Button } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
+import {
+  Col,
+  ListGroup,
+  Row,
+  Image,
+  Form,
+  Button,
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { addItem, removeItem } from "../slices/cartSlice";
 import { FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Message from "../components/Message";
+import { toast } from "react-toastify";
+
 const CartPage = () => {
   const { cartItems, shippingCharge, totalPrice, itemPrice } = useSelector(
     (state) => state.cart
@@ -16,11 +25,24 @@ const CartPage = () => {
   const removeCartItem = (id) => {
     dispatch(removeItem(id));
   };
+
+  const [promo, setPromo] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const promoHandler = (e) => {
+    if (promo === "123456") {
+      setDiscount(5);
+      toast.success("Promo Applied!");
+    } else {
+      setDiscount(0);
+      toast.error("Invalid promo code");
+    }
+  };
+
   return (
     <>
-      {cartItems.length == 0 ? (
-        <Message variant="warning">
-          Your cart is currently empty. <Link to="/">Go to Products</Link>
+      {cartItems.length === 0 ? (
+        <Message>
+          Your Cart is currently empty. Browse <Link to="/">Products.</Link>
         </Message>
       ) : (
         <Row>
@@ -33,11 +55,13 @@ const CartPage = () => {
                       <Image src={item.image} fluid rounded alt="item image" />
                     </Col>
                     <Col md={3}>
-                      <Link to={`/product/${item._id}`}>
+                      <Link
+                        to={`/product/${item._id}`}
+                        className="nav-link mb-4"
+                      >
                         <strong>{item.name}</strong>
                       </Link>
-                    </Col>
-                    <Col md={2}>
+                      <strong> Price: </strong>
                       <span>${(item.qty * item.price).toFixed(2)}</span>
                     </Col>
                     <Col md={2}>
@@ -77,13 +101,28 @@ const CartPage = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Net Total</Col>
-                  <Col>${itemPrice}</Col>
+                  <Col>
+                    {discount === 5 ? (
+                      <>
+                        <s>${itemPrice.toFixed(2)}</s> $
+                        <b style={{color: 'green'}}>{(itemPrice - discount).toFixed(2)}</b>
+                      </>
+                    ) : (
+                      `$${itemPrice.toFixed(2)}`
+                    )}
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping Charge</Col>
-                  <Col>${shippingCharge}</Col>
+                  <Col>
+                    {totalPrice >= 100 ? (
+                      <em>*Free Shipping</em>
+                    ) : (
+                      `$${shippingCharge}`
+                    )}
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
@@ -92,16 +131,38 @@ const CartPage = () => {
                     <strong>Total</strong>
                   </Col>
                   <Col>
-                    <strong>${totalPrice}</strong>
+                    <strong>${totalPrice - discount}</strong>
                   </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Link
-                  to="/signin?redirect=/shipping"
-                  className="btn btn-secondary"
-                >
-                  Checkout
+                <Row>
+                  <Col>Promo:</Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <input
+                      type="text"
+                      placeholder="Enter Promo code..."
+                      maxLength="6"
+                      value={promo}
+                      onChange={(e) => setPromo(e.target.value)}
+                    ></input>
+                  </Col>
+                  <Col>
+                    <Button
+                      variant="success"
+                      onClick={promoHandler}
+                      disabled={discount == 5}
+                    >
+                      Apply
+                    </Button>
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Link to="../login?redirect=/shipping">
+                  <Button>Checkout</Button>
                 </Link>
               </ListGroup.Item>
             </ListGroup>

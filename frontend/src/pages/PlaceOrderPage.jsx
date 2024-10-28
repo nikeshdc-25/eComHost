@@ -1,25 +1,29 @@
-import { Row, Col, Image, ListGroup, Button, Card } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import React from "react";
+import { Col, ListGroup, Row, Image, Card, Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useAddOrderMutation } from "../slices/orderSlice";
+import { toast } from "react-toastify";
+import { removeCart } from "../slices/cartSlice";
 
-function PlaceOrderPage() {
-  const { cartItems, shippingAddress, itemPrice, shippingCharge, totalPrice } =
+function OrderPage() {
+  const { cartItems, shippingAddress, itemPrice, totalPrice, shippingCharge } =
     useSelector((state) => state.cart);
   const [addOrder, { isLoading }] = useAddOrderMutation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const placeOrderHandler = async () => {
     try {
-      let resp = await addOrder({
+      let res = await addOrder({
         orderItems: cartItems,
         shippingAddress,
         itemPrice,
         shippingCharge,
         totalPrice,
       }).unwrap();
-      navigate("/order/" + resp.orderId);
-      toast.success(resp.message);
+      toast.success(res.message);
+      dispatch(removeCart());
+      navigate("/order/" + res.orderId);
     } catch (err) {
       toast.error(err.data.error);
     }
@@ -29,11 +33,17 @@ function PlaceOrderPage() {
       <Col md={8}>
         <ListGroup variant="flush">
           <ListGroup.Item>
-            <h2>Shipping</h2>
+            <h1>Shipping</h1>
+            <br /> <h3>User Details:</h3>
             <p>
-              Name: {shippingAddress.recipient} | {shippingAddress.phone}
-              <br />
-              Address: {shippingAddress.address} | {shippingAddress.city}
+              <strong>Name: </strong>
+              {shippingAddress.recipient} <br />
+              <strong>Phone: </strong>
+              {shippingAddress.phone} <br />
+              <strong>Address: </strong>
+              {shippingAddress.address} <br />
+              <strong>City: </strong>
+              {shippingAddress.city} <br />
             </p>
           </ListGroup.Item>
           <ListGroup.Item>
@@ -44,13 +54,13 @@ function PlaceOrderPage() {
                     <Image src={item.image} fluid rounded />
                   </Col>
                   <Col>
-                    <Link to={`/product/${item._id}`}>
+                    <Link to={`/product/${item._id}`} className="nav-link">
                       <strong>{item.name}</strong>
                     </Link>
                   </Col>
                   <Col>
                     <strong>
-                      {item.qty} X {item.price} = $
+                      {item.qty} X ${item.price} = $
                       {(item.qty * item.price).toFixed(2)}
                     </strong>
                   </Col>
@@ -68,22 +78,26 @@ function PlaceOrderPage() {
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Item</Col>
+                <Col>Items</Col>
                 <Col>${itemPrice}</Col>
               </Row>
               <Row>
                 <Col>Shipping</Col>
                 <Col>${shippingCharge}</Col>
               </Row>
+            </ListGroup.Item>
+            <ListGroup.Item>
               <Row>
                 <Col>Total</Col>
                 <Col>${totalPrice}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button variant="dark" onClick={placeOrderHandler}>
-                Place Order
-              </Button>
+              <Row>
+                <Button variant="dark" onClick={placeOrderHandler}>
+                  Place Order
+                </Button>
+              </Row>
             </ListGroup.Item>
           </ListGroup>
         </Card>
@@ -91,4 +105,5 @@ function PlaceOrderPage() {
     </Row>
   );
 }
-export default PlaceOrderPage;
+
+export default OrderPage;

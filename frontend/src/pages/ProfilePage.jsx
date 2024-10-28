@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { Row, Col, Form, Button, Table } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { useUpdateUserProfileMutation } from "../slices/userApiSlice";
 import { toast } from "react-toastify";
 import { setCredentials } from "../slices/authSlice";
 import { useGetMyOrdersQuery } from "../slices/orderSlice";
 import { FaTimes } from "react-icons/fa";
 import Message from "../components/Message";
 import { Link } from "react-router-dom";
+import { useUpdatedUserProfileMutation } from "../slices/userApiSlice";
 
 const ProfilePage = () => {
-  const [name, setName] = useState("");
+  const [username, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -18,20 +18,21 @@ const ProfilePage = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
   const [updateUserProfile, { isLoading: profileUpdateLoading }] =
-    useUpdateUserProfileMutation();
+    useUpdatedUserProfileMutation();
 
   const {
     data: orders,
     isLoading: ordersLoading,
     error,
   } = useGetMyOrdersQuery();
+
   const updateProfileHandler = async (e) => {
     e.preventDefault();
     try {
       if (password != confirmPassword) {
         toast.error("Password not matched!");
       } else {
-        let resp = await updateUserProfile({ name, email, password }).unwrap();
+        let resp = await updateUserProfile({ username, email, password }).unwrap();
         dispatch(setCredentials(resp.user));
         toast.success(resp.message);
       }
@@ -49,11 +50,11 @@ const ProfilePage = () => {
       <Col md={4}>
         <h3>Profile</h3>
         <Form onSubmit={updateProfileHandler}>
-          <Form.Group controlId="name" className="my-3">
+          <Form.Group controlId="username" className="my-3">
             <Form.Control
               type="text"
               placeholder="Enter Name"
-              value={name}
+              value={username}
               onChange={(e) => setName(e.target.value)}
             />
           </Form.Group>
@@ -125,7 +126,7 @@ const ProfilePage = () => {
                     )}
                   </td>
                   <td>
-                    <Link to={`/order/${order._id}`}>
+                    <Link to={`/confirmorder/${order._id}`}>
                       <Button variant="light" size="sm">
                         Details
                       </Button>

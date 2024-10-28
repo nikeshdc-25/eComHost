@@ -48,7 +48,9 @@ function OrderPage() {
               {order.shippingAddress.city}
             </p>
             {order.isDelivered ? (
-              <Message>Delivered at {order.deliveredAt}</Message>
+              <Message variant="success">
+                Delivered at {order.deliveredAt}
+              </Message>
             ) : (
               <Message variant="danger">Not Delivered</Message>
             )}
@@ -57,7 +59,7 @@ function OrderPage() {
             <h3>Payment</h3>
             <p>Mode: COD</p>
             {order.isPaid ? (
-              <Message>Paid ${order.totalPrice}</Message>
+              <Message variant="success">Paid ${order.totalPrice}</Message>
             ) : (
               <Message variant="danger">Not Paid</Message>
             )}
@@ -70,13 +72,13 @@ function OrderPage() {
                     <Image src={item.image} fluid rounded />
                   </Col>
                   <Col>
-                    <Link to={`/product/${item.product}`}>
+                    <Link to={`/product/${item.product}`} className="nav-link">
                       <strong>{item.name}</strong>
                     </Link>
                   </Col>
                   <Col>
                     <strong>
-                      {item.qty} X {item.price} = $
+                      {item.qty} X ${item.price} = $
                       {(item.qty * item.price).toFixed(2)}
                     </strong>
                   </Col>
@@ -117,10 +119,10 @@ function OrderPage() {
                         updateStatusHandler(order._id, e.target.value)
                       }
                     >
-                      <option>pending</option>
-                      <option>in progress</option>
-                      <option>cancelled</option>
-                      <option>delivered</option>
+                      <option>Pending</option>
+                      <option>In Progress</option>
+                      <option>Cancelled</option>
+                      <option>Delivered</option>
                     </Form.Control>
                   ) : (
                     <Badge bg={orderStatusColor[order.status]}>

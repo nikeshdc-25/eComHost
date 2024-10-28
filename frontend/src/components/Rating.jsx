@@ -48,7 +48,10 @@ function Rating({ value, text = "" }) {
           <FaRegStar />
         )}
       </span>
-      <span className="rating-text">{text ? `${text} reviews` : ""}</span>
+      <span className="rating-text">
+        {" "}
+        {text ? (text == 1 ? ` (${text} review)` : ` (${text} reviews)`) : ""}
+      </span>
     </div>
   );
 }

@@ -1,0 +1,7 @@
+.header-underline:active{
+    border: none;
+    border-bottom: 3px solid rgb(31, 170, 0);
+    padding-bottom: 5px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}

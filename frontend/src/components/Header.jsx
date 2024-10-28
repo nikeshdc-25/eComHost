@@ -1,12 +1,25 @@
-import { Navbar, Container, Nav, Badge, NavDropdown } from "react-bootstrap";
-import { FaShoppingCart, FaUser } from "react-icons/fa";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import { Container, Navbar, Nav, Badge, NavDropdown } from "react-bootstrap";
 import logo from "../assets/react.svg";
+import {
+  FaShoppingCart,
+  FaUser,
+  FaHouseUser,
+  FaHeart,
+  FaSignOutAlt,
+  FaUserCog,
+  FaBoxes,
+  FaUserEdit,
+  FaSitemap,
+} from "react-icons/fa";
+import "./Header.css";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../slices/authSlice";
+import { toast } from "react-toastify";
+import { IoMdSettings } from "react-icons/io";
+import { FiActivity } from "react-icons/fi";
+import { CgProfile } from "react-icons/cg";
 import { useUserLogoutMutation } from "../slices/userApiSlice";
-import { LinkContainer } from "react-router-bootstrap";
 import SearchBox from "./SearchBox";
 
 function Header() {
@@ -15,69 +28,94 @@ function Header() {
   const [userLogout, { isLoading }] = useUserLogoutMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const logoutHandler = async () => {
     try {
-      let resp = await userLogout().unwrap();
-      dispatch(logout());
-      toast.success(resp.message);
-      navigate("/signin");
+      let res = await userLogout().unwrap();
+      dispatch(logout()); // Dispatch the logout action
+      toast.warn(res.message);
+      navigate("/login");
     } catch (err) {
       toast.error(err.data.error);
     }
   };
 
-  console.log(cartItems);
   return (
     <header>
       <Navbar variant="dark" bg="dark" expand="md" collapseOnSelect>
+        <NavLink to="/" className="navbar-brand">
+          <Navbar.Brand className="px-2">
+            <img src={logo} alt="logo" /> ECommerce
+          </Navbar.Brand>
+        </NavLink>
         <Container>
-          <NavLink to="/" className="navbar-brand">
-            <img src={logo} alt="logo" /> Broadway
-          </NavLink>
           <Navbar.Toggle aria-controls="navbar" />
 
           <Navbar.Collapse id="navbar">
             <Nav className="ms-auto">
-              <SearchBox />
-              <NavLink to="/cart" className="nav-link">
+              <SearchBox/>
+              <NavLink to="" className="header-underline nav-link">
+                <FaHouseUser /> Home
+              </NavLink>
+              <NavLink to="/cart" className="header-underline nav-link">
                 <FaShoppingCart /> Cart{" "}
                 {cartItems.length > 0 && (
                   <Badge bg="success" pill>
-                    {cartItems.reduce((acc, item) => acc + item.qty, 0)}
+                    {cartItems.length}
                   </Badge>
                 )}
               </NavLink>
+              <NavLink to="/wishlist" className="header-underline nav-link">
+                <FaHeart /> Wishlist
+              </NavLink>
               {userInfo ? (
-                <NavDropdown title={userInfo.name} id="profile-dropdown">
-                  <NavDropdown.Item
-                    onClick={() => {
-                      navigate("/profile");
-                    }}
-                  >
-                    Profile
+                <NavDropdown title={userInfo.name} id="Profile-dropdown">
+                  <NavDropdown.Item onClick={() => navigate("/profile")}>
+                    <CgProfile /> Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
+                    <FiActivity /> Activity
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
+                    <IoMdSettings /> Setting
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={logoutHandler}>
-                    Logout
+                    <FaSignOutAlt /> Logout
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <NavLink to="/signin" className="nav-link">
-                  <FaUser /> Signin
+                <NavLink to="/login" className="header-underline nav-link">
+                  <FaUser /> Login
                 </NavLink>
               )}
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown
-                  title="admin"
+                  title={<FaUserCog />}
                   id="admin-routes"
                   variant="dark"
                   bg="dark"
                 >
-                  <LinkContainer to="/admin/orders">
-                    <NavDropdown.Item>Orders</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to="/admin/products">
-                    <NavDropdown.Item>Products</NavDropdown.Item>
-                  </LinkContainer>
+                  <NavDropdown.Item
+                    onClick={() => {
+                      navigate("/admin/orders");
+                    }}
+                  >
+                    <FaSitemap /> Orders
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={() => {
+                      navigate("/admin/users");
+                    }}
+                  >
+                    <FaUserEdit /> Users
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={() => {
+                      navigate("/admin/products");
+                    }}
+                  >
+                    <FaBoxes /> Products
+                  </NavDropdown.Item>
                 </NavDropdown>
               )}
             </Nav>

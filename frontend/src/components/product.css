@@ -1,0 +1,15 @@
+.product-title{
+    text-overflow:ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: rgb(210, 0, 0);
+    display: block;
+}
+.product-card{
+    box-shadow: 0 .5rem 1.2rem rgba(0,0,0,.2);
+    transition: all 0.3s ease;
+}
+.product-card:hover{
+    transform: translateY(-10px);
+    box-shadow: 0 .5rem 1.2rem rgba(0,0,0,.6);
+}

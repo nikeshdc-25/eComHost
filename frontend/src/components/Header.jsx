@@ -45,7 +45,7 @@ function Header() {
       <Navbar variant="dark" bg="dark" expand="md" collapseOnSelect>
         <NavLink to="/" className="navbar-brand">
           <Navbar.Brand className="px-2">
-            <img src={logo} alt="logo" /> ECommerce
+            <img src={logo} alt="logo" /> vShop
           </Navbar.Brand>
         </NavLink>
         <Container>
@@ -53,7 +53,7 @@ function Header() {
 
           <Navbar.Collapse id="navbar">
             <Nav className="ms-auto">
-              <SearchBox/>
+              <SearchBox />
               <NavLink to="" className="header-underline nav-link">
                 <FaHouseUser /> Home
               </NavLink>

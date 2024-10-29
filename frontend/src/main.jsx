@@ -13,6 +13,7 @@ import HomePage, { dataLoader } from "./pages/HomePage.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
 import CartPage from "./pages/CartPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store.js";
 import ShippingPage from "./pages/ShippingPage.jsx";
@@ -73,6 +74,7 @@ const router = createBrowserRouter(
       <Route path="product/:id" element={<ProductPage />} />
       <Route path="cart" element={<CartPage />} />
       <Route path="login" element={<LoginPage />} />
+      <Route path="register" element={<RegisterPage />} />
       <Route path="" element={<PrivateRoute />}>
         <Route path="shipping" element={<ShippingPage />} />
         <Route path="profile" element={<ProfilePage />} />

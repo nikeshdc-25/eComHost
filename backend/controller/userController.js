@@ -17,7 +17,7 @@ const signup = asyncHandler(async (req, res, next) => {
   if (!isStrong(password)) {
     throw new ApiError(
       404,
-      "You Wickling, include 1 Uppercase, Symbols and 1 Number in your password!"
+      "Must include 1 Uppercase, Symbols and 1 Number in your password!"
     );
   }
   if (userExists) {
@@ -28,7 +28,14 @@ const signup = asyncHandler(async (req, res, next) => {
   // let salt = await bcrypt.genSalt(10);
   // let hashedPassword = await bcrypt.hash(password, salt);
   let user = await User.create(req.body);
-  res.send({ message: "User registered Successfully!" });
+  res.send({
+    message: "User registered Successfully!",
+    user: {
+      name: user.username,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    },
+  });
   createToken(res, user._id);
 });
 
@@ -97,12 +104,14 @@ const updateProfile = asyncHandler(async (req, res) => {
       user.password = req.body.password; //If new password is given, it should be hashed.
     }
     let updatedUser = await user.save();
-    res.send({ message: "User Updated Successfully!",
-       user: {
+    res.send({
+      message: "User Updated Successfully!",
+      user: {
         name: updatedUser.username,
         email: updatedUser.email,
-        isAdmin: updateUser.isAdmin
-    }});
+        isAdmin: updateUser.isAdmin,
+      },
+    });
   } else {
     throw new ApiError(404, "User not found!");
   }

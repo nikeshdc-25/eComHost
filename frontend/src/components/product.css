@@ -2,7 +2,7 @@
     text-overflow:ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    color: rgb(210, 0, 0);
+    color: rgb(82, 82, 82);
     display: block;
 }
 .product-card{
@@ -12,4 +12,9 @@
 .product-card:hover{
     transform: translateY(-10px);
     box-shadow: 0 .5rem 1.2rem rgba(0,0,0,.6);
+}
+
+.product-price{
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: rgb(82, 82, 82);
 }

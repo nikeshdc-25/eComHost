@@ -1,5 +1,4 @@
 import { ORDER_URL } from "../constant";
-import PlaceOrderPage from "../pages/PlaceOrderPage";
 import { apiSlice } from "./apiSlice";
 
 const orderSlice = apiSlice.injectEndpoints({

@@ -23,7 +23,7 @@ const addProduct = asyncHandler(async (req, res) => {
 // @route   GET /api/v1/products?pageNumber=3
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-    const pageSize = 3;
+    const pageSize = 4;
     const page = Number(req.query.pageNumber) || 1;
     let keyword = req.query.keyword;
     keyword = keyword

@@ -17,6 +17,7 @@
 .product-price{
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: rgb(82, 82, 82);
+    font-size: x-large
 }
 
 .view{
@@ -75,7 +76,7 @@
   .addToCart::before {
     position: absolute;
     content: "Add To Cart";
-    color: #90ff77;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,10 +84,19 @@
     height: 90%;
     border-radius: 8px;
     transition-duration: 1s;
-    background-color: rgba(0, 0, 0, 0.842);
+    background-color: rgb(16, 16, 16);
     background-size: 200%;
   }
   
-  .addToCart, .quickPay:active {
+  .addToCart:active, .quickPay:active {
     transform: scale(0.95);
+  }
+
+  .modalText{
+    font-size: 1.1rem;
+  }
+
+  .product-description{
+    font-style: italic;
+    font-weight: 500;
   }

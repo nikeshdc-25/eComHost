@@ -162,7 +162,7 @@ const CartPage = () => {
               </ListGroup.Item>
               <ListGroup.Item>
                 <Link to="../login?redirect=/shipping">
-                  <Button>Checkout</Button>
+                  <Button variant="dark">Checkout</Button>
                 </Link>
               </ListGroup.Item>
             </ListGroup>

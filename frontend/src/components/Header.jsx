@@ -1,5 +1,5 @@
 import { Container, Navbar, Nav, Badge, NavDropdown } from "react-bootstrap";
-import logo from "../assets/react.svg";
+import logo from "../assets/vshoplogo.svg";
 import {
   FaShoppingCart,
   FaUser,
@@ -42,7 +42,7 @@ function Header() {
 
   return (
     <header>
-      <Navbar variant="dark" bg="dark" expand="md" collapseOnSelect>
+      <Navbar variant="light" bg="light" expand="md" collapseOnSelect>
         <NavLink to="/" className="navbar-brand">
           <Navbar.Brand className="px-2">
             <img src={logo} alt="logo" /> vShop

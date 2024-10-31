@@ -3,7 +3,7 @@ import { Button, Card, CardFooter } from "react-bootstrap";
 import Rating from "./Rating";
 import "./product.css";
 import { Link } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
+import { IoEyeSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../slices/cartSlice";
 import { toast } from "react-toastify";
@@ -15,10 +15,6 @@ function Product({ product }) {
   const addToCartHandler = (item) => {
     // Check if the item is already in the cart
     const itemExists = cartItems.some((cartItem) => cartItem._id === item._id);
-    console.log("Item to add:", item);
-  console.log("Current cart items:", cartItems);
-
-
     if (itemExists) {
       toast.error(`Product is already in your cart.`);
     } else {
@@ -45,21 +41,21 @@ function Product({ product }) {
           </Rating>
         </Card.Text>
         <Card.Text as="h3" className="product-price">
-          ${product.price}
+        Rs.{product.price}
         </Card.Text>
       </Card.Body>
       <CardFooter>
         <div className="d-flex justify-content-start gap-2">
           <Button
-            variant="success"
+             className="addToCart"
             disabled={product.countInStock <= 0}
             onClick={() => addToCartHandler({ ...product, qty: 1 })}
           >
             Add to Cart
           </Button>
-          <Button variant="warning">Quick Pay</Button>
+          <Button variant="warning" className="quickPay">Quick Pay</Button>
           <button className="btn ms-auto">
-            <FaEye />
+              <IoEyeSharp className="view" />
           </button>
         </div>
       </CardFooter>

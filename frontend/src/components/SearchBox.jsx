@@ -19,12 +19,12 @@ function SearchBox() {
       <Form.Control
         type="text"
         placeholder="Search Products"
-        className="mx-3"
+        className="mx-2"
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
       />
-      <Button type="submit" variant="outline-light">
-        Search
+      <Button type="submit" variant="dark">
+        <b>Search</b>
       </Button>
     </Form>
   );

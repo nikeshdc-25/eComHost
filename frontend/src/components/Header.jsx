@@ -1,5 +1,5 @@
 import { Container, Navbar, Nav, Badge, NavDropdown } from "react-bootstrap";
-import logo from "../assets/vshoplogo.svg";
+import logo from "../assets/vshopBlack.png";
 import {
   FaShoppingCart,
   FaUser,
@@ -42,10 +42,10 @@ function Header() {
 
   return (
     <header>
-      <Navbar variant="light" bg="light" expand="md" collapseOnSelect>
+      <Navbar className="navbar" variant="light" expand="md" collapseOnSelect>
         <NavLink to="/" className="navbar-brand">
           <Navbar.Brand className="px-2">
-            <img src={logo} alt="logo" /> vShop
+            <img src={logo} alt="logo" width={60} /> <b>VShop<sup>NP</sup></b>
           </Navbar.Brand>
         </NavLink>
         <Container>
@@ -69,7 +69,7 @@ function Header() {
                 <FaHeart /> Wishlist
               </NavLink>
               {userInfo ? (
-                <NavDropdown title={userInfo.name} id="Profile-dropdown">
+                <b><NavDropdown title={userInfo.name} id="Profile-dropdown">
                   <NavDropdown.Item onClick={() => navigate("/profile")}>
                     <CgProfile /> Profile
                   </NavDropdown.Item>
@@ -83,6 +83,7 @@ function Header() {
                     <FaSignOutAlt /> Logout
                   </NavDropdown.Item>
                 </NavDropdown>
+                </b>
               ) : (
                 <NavLink to="/login" className="header-underline nav-link">
                   <FaUser /> Login

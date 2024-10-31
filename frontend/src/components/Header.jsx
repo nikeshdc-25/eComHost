@@ -21,6 +21,7 @@ import { FiActivity } from "react-icons/fi";
 import { CgProfile } from "react-icons/cg";
 import { useUserLogoutMutation } from "../slices/userApiSlice";
 import SearchBox from "./SearchBox";
+import MarqueeBanner from "./MarqueeBanner";
 
 function Header() {
   const { cartItems } = useSelector((state) => state.cart);
@@ -41,11 +42,12 @@ function Header() {
   };
 
   return (
-    <header>
+    <header className="fixed-top">
+      <MarqueeBanner />
       <Navbar className="navbar" variant="light" expand="md" collapseOnSelect>
         <NavLink to="/" className="navbar-brand">
           <Navbar.Brand className="px-2">
-            <img src={logo} alt="logo" width={60} /> <b>VShop<sup>NP</sup></b>
+            <img src={logo} alt="logo" width={50} /> <b>VShop<sup>NP</sup></b>
           </Navbar.Brand>
         </NavLink>
         <Container>

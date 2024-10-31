@@ -12,6 +12,9 @@ import {
 } from "../slices/productSlice";
 import Message from "../components/Message";
 import { toast } from "react-toastify";
+import { MdCancel } from "react-icons/md";
+import { FaCheckCircle } from "react-icons/fa";
+
 
 function ProductPage() {
   const { id } = useParams();
@@ -59,9 +62,6 @@ function ProductPage() {
       ) : (
         <>
           <Meta title={product.name} description={product.description} />
-          <Link className="btn btn-light" to="/">
-            Go Back
-          </Link>
           <Row className="my-3">
             <Col md={5}>
               <Image src={product.image} fluid />
@@ -98,9 +98,10 @@ function ProductPage() {
                     <Col>
                       <strong>
                         {product.countInStock > 0 ? (
-                          "In Stock"
+                          <x>In Stock <FaCheckCircle color="green" size={20}/></x>
                         ) : (
-                          <b style={{ color: "red" }}>Out of Stock</b>
+                            <x>Out of Stock <MdCancel color="red" size={20}/></x>
+                            
                         )}
                       </strong>
                     </Col>
@@ -154,8 +155,9 @@ function ProductPage() {
                       <Form.Control
                         as="select"
                         onChange={(e) => setRating(e.target.value)}
+                        required
                       >
-                        <option value={0}>Select Rating...</option>
+                        <option value="">Select Rating...</option>
                         <option value={1}>1 - Poor</option>
                         <option value={2}>2 - Satisfactory</option>
                         <option value={3}>3 - Good</option>
@@ -173,7 +175,7 @@ function ProductPage() {
                       />
                     </Form.Group>
                     <Button type="submit" variant="dark" className="my-3">
-                      Add
+                      Add Review
                     </Button>
                   </Form>
                 )

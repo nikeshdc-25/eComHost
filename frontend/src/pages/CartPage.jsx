@@ -13,6 +13,9 @@ import { FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Message from "../components/Message";
 import { toast } from "react-toastify";
+import { TbTruckDelivery } from "react-icons/tb";
+import "./CartPage.css";
+
 
 const CartPage = () => {
   const { cartItems, shippingCharge, totalPrice, itemPrice } = useSelector(
@@ -91,6 +94,8 @@ const CartPage = () => {
             </ListGroup>
           </Col>
           <Col md={4}>
+          <b className="deliveryMsg"><TbTruckDelivery size={50}/> Free Delivery Above Rs. 500 Spent.</b> 
+
             <ListGroup>
               <ListGroup.Item>
                 <h4>

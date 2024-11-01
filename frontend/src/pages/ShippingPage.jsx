@@ -75,7 +75,7 @@ const ShippingPage = () => {
           <Form.Label>City</Form.Label>
           <Form.Control
             type="text"
-            placeholder="province/City/District"
+            placeholder="Province/City/District"
             value={city}
             onChange={(e) => setCity(e.target.value)}
             required

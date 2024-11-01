@@ -14,6 +14,7 @@ import Message from "../components/Message";
 import { toast } from "react-toastify";
 import { MdCancel } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
+import { SideBySideMagnifier } from "react-image-magnifiers";
 
 
 function ProductPage() {
@@ -64,7 +65,14 @@ function ProductPage() {
           <Meta title={product.name} description={product.description} />
           <Row className="my-3">
             <Col md={5}>
-              <Image src={product.image} fluid />
+            <SideBySideMagnifier
+                imageSrc={product.image}
+                alwaysInPlace={true}
+                overlayOpacity={0.5}
+                zoomContainerSize={{ width: '200px', height: '200px' }}
+                zoomContainerBorder="1px solid #ddd"
+                zoomContainerBoxShadow="0px 4px 8px rgba(0, 122, 18, 0.2)"
+              />
             </Col>
             <Col md={4}>
               <ListGroup variant="flush">

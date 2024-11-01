@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Button, Card, CardFooter, Col, ListGroup, Modal, Row } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  CardFooter,
+  Col,
+  ListGroup,
+  Modal,
+  Row,
+} from "react-bootstrap";
 import Rating from "./Rating";
 import "./product.css";
 import { Link } from "react-router-dom";
@@ -7,6 +15,7 @@ import { IoEyeSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../slices/cartSlice";
 import { toast } from "react-toastify";
+import { MdAddShoppingCart } from "react-icons/md";
 
 function Product({ product }) {
   const dispatch = useDispatch();
@@ -66,34 +75,51 @@ function Product({ product }) {
         </CardFooter>
       </Card>
 
-      <Modal show={showQuickView} onHide={handleCloseQuickView} centered size="lg">
-  <Modal.Body>
-    <Row>
-      <Col md={5} className="d-flex justify-content-center align-items-start">
-        <img src={product.image} alt={product.name} className="quickview-image" style={{ width: '100%', maxWidth: '250px', objectFit: 'cover' }} />
-      </Col>
-      <Col md={7}>
-        <ListGroup variant="flush" className="modalText">
-          <ListGroup.Item><strong>{product.name}</strong></ListGroup.Item>
-          <ListGroup.Item>Price: Rs.{product.price}</ListGroup.Item>
-          <ListGroup.Item>Stock: {product.countInStock}</ListGroup.Item>
-          <ListGroup.Item className="product-rating">
-            <Rating value={product.rating} text={`${product.numReviews}`} />
-          </ListGroup.Item>
-        </ListGroup>
-      </Col>
-    </Row>
+      <Modal
+        show={showQuickView}
+        onHide={handleCloseQuickView}
+        centered
+        size="lg"
+      >
+        <Modal.Body>
+          <Row>
+            <Col
+              md={5}
+              className="d-flex justify-content-center align-items-start"
+            >
+              <img
+                src={product.image}
+                alt={product.name}
+                className="quickview-image"
+                style={{ width: "100%", maxWidth: "250px", objectFit: "cover" }}
+              />
+            </Col>
+            <Col md={7}>
+              <ListGroup variant="flush" className="modalText">
+                <ListGroup.Item>
+                  <strong>{product.name}</strong>
+                </ListGroup.Item>
+                <ListGroup.Item>Price: Rs.{product.price}</ListGroup.Item>
+                <ListGroup.Item>Stock: {product.countInStock}</ListGroup.Item>
+                <ListGroup.Item className="product-rating">
+                  <Rating
+                    value={product.rating}
+                    text={`${product.numReviews}`}
+                  />
+                </ListGroup.Item>
+              </ListGroup>
+            </Col>
+          </Row>
 
-    <Row className="mt-3">
-      <Col>
-        <div className="product-description">
-          <p>{product.description}</p>
-        </div>
-      </Col>
-    </Row>
-  </Modal.Body>
-</Modal>
-
+          <Row className="mt-3">
+            <Col>
+              <div className="product-description">
+                <p>{product.description}</p>
+              </div>
+            </Col>
+          </Row>
+        </Modal.Body>
+      </Modal>
     </>
   );
 }

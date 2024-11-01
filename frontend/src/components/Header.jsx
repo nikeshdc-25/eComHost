@@ -18,7 +18,6 @@ import { logout } from "../slices/authSlice";
 import { toast } from "react-toastify";
 import { IoMdSettings } from "react-icons/io";
 import { FiActivity } from "react-icons/fi";
-import { CgProfile } from "react-icons/cg";
 import { useUserLogoutMutation } from "../slices/userApiSlice";
 import SearchBox from "./SearchBox";
 import MarqueeBanner from "./MarqueeBanner";
@@ -73,7 +72,7 @@ function Header() {
               {userInfo ? (
                 <b><NavDropdown title={userInfo.name} id="Profile-dropdown">
                   <NavDropdown.Item onClick={() => navigate("/profile")}>
-                    <CgProfile /> Profile
+                  <FaUserEdit /> Profile
                   </NavDropdown.Item>
                   <NavDropdown.Item>
                     <FiActivity /> Activity

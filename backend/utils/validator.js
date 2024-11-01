@@ -8,4 +8,8 @@ function isStrong(password){
     return passwordPattern.test(password);
 }
 
-export { isEmail, isStrong };
+function isPhone(primaryPhone){
+    const phonePattern = /^(98|97|96)\d{8}$/;
+    return phonePattern.test(primaryPhone);
+}
+export { isEmail, isStrong, isPhone };

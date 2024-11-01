@@ -45,7 +45,7 @@ const CartPage = () => {
     <>
       {cartItems.length === 0 ? (
         <Message>
-          Your Cart is currently empty. Browse <Link to="/">Products.</Link>
+          Your cart is currently empty. Browse <Link to="/">Products.</Link>
         </Message>
       ) : (
         <Row>

@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema(
       required: true,
       minLength: 8,
     },
+    primaryPhone:{
+      type: String,
+      required: true,
+      unique: true,
+    },
     isAdmin: {
       type: Boolean,
       default: false,

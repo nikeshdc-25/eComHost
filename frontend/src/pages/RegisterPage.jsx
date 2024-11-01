@@ -11,6 +11,8 @@ const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [primaryPhone, setPrimaryPhone] = useState("");
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -26,8 +28,12 @@ const RegisterPage = () => {
   }, [userInfo, redirect, navigate]);
   const submitHandler = async (e) => {
     e.preventDefault();
+    if(password != confirmPassword){
+      toast.error("Password did't match.");
+      return;
+    }
     try {
-      let resp = await signup({ username, email, password }).unwrap();
+      let resp = await signup({ username, email, password, primaryPhone }).unwrap();
       dispatch(setCredentials(resp.user));
       toast.success(resp.message);
     } catch (err) {
@@ -62,6 +68,25 @@ const RegisterPage = () => {
             placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+          ></Form.Control>
+        </FormGroup>
+        <FormGroup controlId="cpassword" className="my-3">
+          <Form.Label>Confirm Password*</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Re-type password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          ></Form.Control>
+        </FormGroup>
+        <FormGroup controlId="primaryPhone" className="my-3">
+          <Form.Label>Contact</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter phone no."
+            value={primaryPhone}
+            onChange={(e) => setPrimaryPhone(e.target.value)}
+            required
           ></Form.Control>
         </FormGroup>
         <Button type="submit" variant="warning" className="mt-2">

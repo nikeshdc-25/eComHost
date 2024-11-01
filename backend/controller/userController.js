@@ -2,14 +2,14 @@ import User from "../models/userModel.js";
 import createToken from "../utils/tokenUtil.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import ApiError from "../utils/apiError.js";
-import { isEmail, isStrong } from "../utils/validator.js";
+import { isEmail, isPhone, isStrong } from "../utils/validator.js";
 // import bcrypt from "bcryptjs";
 
 //@desc register new user
 //route /api/v1/user/signup
 //@access public
 const signup = asyncHandler(async (req, res, next) => {
-  let { email, password } = req.body;
+  let { email, password, primaryPhone } = req.body;
   let userExists = await User.findOne({ email }); //{email(from userSchema): useremail(from frontend)}
   if (!isEmail(email)) {
     throw new ApiError(404, "Invalid Email!");
@@ -18,6 +18,11 @@ const signup = asyncHandler(async (req, res, next) => {
     throw new ApiError(
       404,
       "Must include 1 Uppercase, Symbols and 1 Number in your password!"
+    );
+  }
+  if(!isPhone(primaryPhone)){
+    throw new ApiError(
+      404, "Use valid phone number!"
     );
   }
   if (userExists) {
@@ -33,6 +38,7 @@ const signup = asyncHandler(async (req, res, next) => {
     user: {
       name: user.username,
       email: user.email,
+      primaryPhone: user.primaryPhone,
       isAdmin: user.isAdmin,
     },
   });
@@ -58,6 +64,7 @@ const login = asyncHandler(async (req, res, next) => {
         name: user.username,
         email: user.email,
         isAdmin: user.isAdmin,
+        primaryPhone: user.primaryPhone,
       },
     });
   } else {
@@ -99,6 +106,7 @@ const updateProfile = asyncHandler(async (req, res) => {
   if (user) {
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;
+    user.primaryPhone = req.body.primaryPhone || user.primaryPhone;
     if (req.body.password) {
       //If no password is given, no need to be hashed again.
       user.password = req.body.password; //If new password is given, it should be hashed.
@@ -109,7 +117,8 @@ const updateProfile = asyncHandler(async (req, res) => {
       user: {
         name: updatedUser.username,
         email: updatedUser.email,
-        isAdmin: updateUser.isAdmin,
+        isAdmin: updatedUser.isAdmin,
+        primaryPhone: updatedUser.primaryPhone,
       },
     });
   } else {

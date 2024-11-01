@@ -8,12 +8,15 @@ import { FaTimes } from "react-icons/fa";
 import Message from "../components/Message";
 import { Link } from "react-router-dom";
 import { useUpdatedUserProfileMutation } from "../slices/userApiSlice";
+import { FaUserEdit } from "react-icons/fa";
+
 
 const ProfilePage = () => {
   const [username, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [primaryPhone, setPrimaryPhone] = useState("");
 
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
@@ -32,7 +35,7 @@ const ProfilePage = () => {
       if (password != confirmPassword) {
         toast.error("Password not matched!");
       } else {
-        let resp = await updateUserProfile({ username, email, password }).unwrap();
+        let resp = await updateUserProfile({ username, email, password, primaryPhone }).unwrap();
         dispatch(setCredentials(resp.user));
         toast.success(resp.message);
       }
@@ -44,18 +47,19 @@ const ProfilePage = () => {
   useEffect(() => {
     setName(userInfo.name);
     setEmail(userInfo.email);
-  }, [userInfo.name, userInfo.email]);
+    setPrimaryPhone(userInfo.primaryPhone);
+  }, [userInfo.name, userInfo.email, userInfo.primaryPhone]);
   return (
     <Row>
       <Col md={4}>
-        <h3>Profile</h3>
+      <h3><FaUserEdit size={30}/> Profile</h3><hr></hr>
         <Form onSubmit={updateProfileHandler}>
           <Form.Group controlId="username" className="my-3">
             <Form.Control
               type="text"
               placeholder="Enter Name"
               value={username}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)} 
             />
           </Form.Group>
           <Form.Group controlId="email" className="my-3">
@@ -69,7 +73,7 @@ const ProfilePage = () => {
           <Form.Group controlId="password" className="my-3">
             <Form.Control
               type="password"
-              placeholder="Enter Password"
+              placeholder="Change Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -82,6 +86,14 @@ const ProfilePage = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </Form.Group>
+          <Form.Group controlId="primaryPhone" className="my-3">
+          <Form.Control
+            type="text"
+            placeholder="Enter phone no."
+            value={primaryPhone}
+            onChange={(e) => setPrimaryPhone(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
           <Button type="submit" variant="dark">
             Update
           </Button>
@@ -92,7 +104,7 @@ const ProfilePage = () => {
         {ordersLoading ? (
           <h1>Loading...</h1>
         ) : error ? (
-          <Message variatn="danger">{error.data.error}</Message>
+          <Message variant="danger">{error.data.error}</Message>
         ) : (
           <Table responsive hover striped className="table-sm">
             <thead>
@@ -126,7 +138,7 @@ const ProfilePage = () => {
                     )}
                   </td>
                   <td>
-                    <Link to={`/confirmorder/${order._id}`}>
+                    <Link to={`/order/${order._id}`}>
                       <Button variant="light" size="sm">
                         Details
                       </Button>

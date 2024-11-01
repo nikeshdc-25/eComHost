@@ -39,13 +39,16 @@ function OrderPage() {
       <Col md={8}>
         <ListGroup variant="flush">
           <ListGroup.Item>
-            <h3>Shipping</h3>
+            <h3>Shipping</h3><hr></hr>
             <p>
-              Name: {order.shippingAddress.recipient} |{" "}
+              Name: {order.shippingAddress.recipient}
               {order.shippingAddress.phone}
               <br />
               Address: {order.shippingAddress.address} |{" "}
               {order.shippingAddress.city}
+              <br />
+              Phone: {order.shippingAddress.primaryPhone} |{" "}
+              {order.shippingAddress.secondaryPhone}
             </p>
             {order.isDelivered ? (
               <Message variant="success">

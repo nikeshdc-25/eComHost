@@ -11,20 +11,21 @@ const ShippingPage = () => {
   const [recipient, setRecipient] = useState(userInfo.name);
   const [address, setAddress] = useState(shippingAddress.address || "");
   const [city, setCity] = useState(shippingAddress.city || "");
-  const [phone, setPhone] = useState(shippingAddress.phone || "");
+  const [primaryPhone, setPrimaryPhone] = useState(userInfo.primaryPhone);
+  const [secondaryPhone, setSecondaryPhone] = useState(shippingAddress.secondaryPhone || "");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(saveShippingAddress({ recipient, address, city, phone }));
+    dispatch(saveShippingAddress({ recipient, address, city, primaryPhone, secondaryPhone }));
     navigate("/placeorder");
   };
 
   return (
     <FormContainer>
-      <h2>Shipping Address</h2>
+      <h2>Shipping Address</h2><hr></hr>
       <Form onSubmit={submitHandler} className="my-4">
         <Form.Group controlId="recipient" className="my-2">
           <Form.Label>Recipient Name</Form.Label>
@@ -35,13 +36,22 @@ const ShippingPage = () => {
             onChange={(e) => setRecipient(e.target.value)}
           />
         </Form.Group>
-        <Form.Group controlId="recipient" className="my-2">
+        <Form.Group controlId="primaryPhone" className="my-2">
           <Form.Label>Contact</Form.Label>
           <Form.Control
             type="text"
             placeholder="Enter Contact"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            value={primaryPhone}
+            onChange={(e) => setPrimaryPhone(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group controlId="secondaryPhone" className="my-2">
+          <Form.Label>Second Contact</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter Contact"
+            value={secondaryPhone}
+            onChange={(e) => setSecondaryPhone(e.target.value)}
           />
         </Form.Group>
         <Form.Group controlId="address" className="my-2">

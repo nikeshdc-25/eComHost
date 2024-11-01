@@ -6,7 +6,7 @@ import { useAddOrderMutation } from "../slices/orderSlice";
 import { toast } from "react-toastify";
 import { removeCart } from "../slices/cartSlice";
 
-function OrderPage() {
+function PlaceOrderPage() {
   const { cartItems, shippingAddress, itemPrice, totalPrice, shippingCharge } =
     useSelector((state) => state.cart);
   const [addOrder, { isLoading }] = useAddOrderMutation();
@@ -33,13 +33,19 @@ function OrderPage() {
       <Col md={8}>
         <ListGroup variant="flush">
           <ListGroup.Item>
-            <h1>Shipping</h1>
+            <h1>Shipping</h1><hr></hr>
             <br /> <h3>User Details:</h3>
             <p>
               <strong>Name: </strong>
               {shippingAddress.recipient} <br />
-              <strong>Phone: </strong>
-              {shippingAddress.phone} <br />
+              <strong>Phone {shippingAddress.secondaryPhone && 1}: </strong>
+              {shippingAddress.primaryPhone} <br />
+              {shippingAddress.secondaryPhone && (
+                <>
+                <strong>Phone 2: </strong>
+                {shippingAddress.secondaryPhone} <br />
+                </>
+              )}
               <strong>Address: </strong>
               {shippingAddress.address} <br />
               <strong>City: </strong>
@@ -106,4 +112,4 @@ function OrderPage() {
   );
 }
 
-export default OrderPage;
+export default PlaceOrderPage;

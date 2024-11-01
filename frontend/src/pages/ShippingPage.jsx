@@ -4,6 +4,7 @@ import { Form, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { saveShippingAddress } from "../slices/cartSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ShippingPage = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -19,6 +20,12 @@ const ShippingPage = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    const phonePattern = /^(98|97|96)\d{8}$/;
+
+    if (secondaryPhone && !phonePattern.test(secondaryPhone)) {
+      toast.error("Enter a valid phone number.");
+      return;
+    }
     dispatch(saveShippingAddress({ recipient, address, city, primaryPhone, secondaryPhone }));
     navigate("/placeorder");
   };
@@ -49,7 +56,7 @@ const ShippingPage = () => {
           <Form.Label>Second Contact</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter Contact"
+            placeholder="Enter phone"
             value={secondaryPhone}
             onChange={(e) => setSecondaryPhone(e.target.value)}
           />
@@ -61,6 +68,7 @@ const ShippingPage = () => {
             placeholder="house no./building/street/area"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
+            required
           />
         </Form.Group>
         <Form.Group controlId="city" className="my-2">
@@ -70,6 +78,7 @@ const ShippingPage = () => {
             placeholder="province/City/District"
             value={city}
             onChange={(e) => setCity(e.target.value)}
+            required
           />
         </Form.Group>
         <Button type="submit" variant="dark" className="my-2">

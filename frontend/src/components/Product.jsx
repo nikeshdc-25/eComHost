@@ -61,13 +61,13 @@ function Product({ product }) {
         <CardFooter>
           <div className="d-flex justify-content-start gap-2">
             <Button
-              className="addToCart"
+              variant="dark"
               disabled={product.countInStock <= 0}
               onClick={() => addToCartHandler({ ...product, qty: 1 })}
             >
               Add to Cart
             </Button>
-            <Button className="quickPay">Quick Pay</Button>
+            <Button variant="success">Quick Pay</Button>
             <button className="btn ms-auto" onClick={handleShowQuickView}>
               <IoEyeSharp className="view" />
             </button>

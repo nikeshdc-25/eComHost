@@ -128,7 +128,7 @@ function ProductPage() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Button
-                    className="addToCart"
+                    variant="dark"
                     disabled={product.countInStock <= 0}
                     onClick={() =>
                       addToCartHandler({ ...product, qty: Number(qty) })

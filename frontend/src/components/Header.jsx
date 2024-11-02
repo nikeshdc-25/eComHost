@@ -1,4 +1,4 @@
-import { Container, Navbar, Nav, Badge, NavDropdown } from "react-bootstrap";
+import { Container, Navbar, Nav, Badge, NavDropdown, Image } from "react-bootstrap";
 import logo from "../assets/vshopBlack.png";
 import {
   FaShoppingCart,
@@ -21,6 +21,7 @@ import { FiActivity } from "react-icons/fi";
 import { useUserLogoutMutation } from "../slices/userApiSlice";
 import SearchBox from "./SearchBox";
 import MarqueeBanner from "./MarqueeBanner";
+import { useState } from "react";
 
 function Header() {
   const { cartItems } = useSelector((state) => state.cart);
@@ -28,11 +29,12 @@ function Header() {
   const [userLogout, { isLoading }] = useUserLogoutMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [expanded, setExpanded] = useState(false); // Track navbar state
 
   const logoutHandler = async () => {
     try {
       let res = await userLogout().unwrap();
-      dispatch(logout()); // Dispatch the logout action
+      dispatch(logout());
       toast.warn(res.message);
       navigate("/login");
     } catch (err) {
@@ -40,25 +42,48 @@ function Header() {
     }
   };
 
-  return (
-    <header className="fixed-top">
-      <MarqueeBanner />
-      <Navbar className="navbar" variant="light" expand="md" collapseOnSelect>
-        <NavLink to="/" className="navbar-brand">
-          <Navbar.Brand className="px-2">
-            <img src={logo} alt="logo" width={50} /> <b>VShop<sup>NP</sup></b>
-          </Navbar.Brand>
-        </NavLink>
-        <Container>
-          <Navbar.Toggle aria-controls="navbar" />
+  const handleNavClick = (path) => {
+    setExpanded(false);
+    navigate(path);
+  };
 
+  return (
+    <header style={{ position: "fixed", top: 0, width: "100%", zIndex: 1000 }}>
+      <MarqueeBanner />
+      <Navbar
+        expand="md"
+        style={{ backgroundColor: "#f8f9fa" }}
+        variant="light"
+        collapseOnSelect
+        expanded={expanded}
+        onToggle={() => setExpanded(!expanded)}
+      >
+        <Container>
+        <NavLink
+            to="/"
+            className="navbar-brand"
+          >
+            <Image src={logo} alt="logo" width={50} />
+            <b>VShop<sup>NP</sup></b>
+          </NavLink>
+          <Navbar.Toggle
+            aria-controls="navbar"
+          />
           <Navbar.Collapse id="navbar">
             <Nav className="ms-auto">
               <SearchBox />
-              <NavLink to="" className="header-underline nav-link">
+              <NavLink
+                to=""
+                className="nav-link"
+                onClick={() => handleNavClick("/")}
+              >
                 <FaHouseUser /> Home
               </NavLink>
-              <NavLink to="/cart" className="header-underline nav-link">
+              <NavLink
+                to="/cart"
+                className="nav-link"
+                onClick={() => handleNavClick("/cart")}
+              >
                 <FaShoppingCart /> Cart{" "}
                 {cartItems.length > 0 && (
                   <Badge bg="success" pill>
@@ -66,55 +91,51 @@ function Header() {
                   </Badge>
                 )}
               </NavLink>
-              <NavLink to="/wishlist" className="header-underline nav-link">
+              <NavLink
+                to="/wishlist"
+                className="nav-link"
+                onClick={() => handleNavClick("/wishlist")}
+              >
                 <FaHeart /> Wishlist
               </NavLink>
               {userInfo ? (
-                <b><NavDropdown title={userInfo.name} id="Profile-dropdown">
-                  <NavDropdown.Item onClick={() => navigate("/profile")}>
-                  <FaUserEdit /> Profile
+                <NavDropdown title={userInfo.name} id="Profile-dropdown">
+                  <NavDropdown.Item onClick={() => handleNavClick("/profile")}>
+                    <FaUserEdit /> Profile
                   </NavDropdown.Item>
-                  <NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavClick("/activity")}>
                     <FiActivity /> Activity
                   </NavDropdown.Item>
-                  <NavDropdown.Item>
-                    <IoMdSettings /> Setting
+                  <NavDropdown.Item onClick={() => handleNavClick("/settings")}>
+                    <IoMdSettings /> Settings
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={logoutHandler}>
                     <FaSignOutAlt /> Logout
                   </NavDropdown.Item>
                 </NavDropdown>
-                </b>
               ) : (
-                <NavLink to="/login" className="header-underline nav-link">
+                <NavLink
+                  to="/login"
+                  className="nav-link"
+                  onClick={() => handleNavClick("/login")}
+                >
                   <FaUser /> Login
                 </NavLink>
               )}
               {userInfo && userInfo.isAdmin && (
-                <NavDropdown
-                  title={<FaUserCog />}
-                  id="admin-routes"
-                  variant="dark"
-                  bg="dark"
-                >
+                <NavDropdown title={<FaUserCog />} id="admin-routes">
                   <NavDropdown.Item
-                    onClick={() => {
-                      navigate("/admin/orders");
-                    }}
+                    onClick={() => handleNavClick("/admin/orders")}
                   >
                     <FaSitemap /> Orders
                   </NavDropdown.Item>
                   <NavDropdown.Item
-                    onClick={() => {
-                      navigate("/admin/users");
-                    }}
+                    onClick={() => handleNavClick("/admin/users")}
                   >
                     <FaUserEdit /> Users
                   </NavDropdown.Item>
                   <NavDropdown.Item
-                    onClick={() => {
-                      navigate("/admin/products");
-                    }}
+                    onClick={() => handleNavClick("/admin/products")}
                   >
                     <FaBoxes /> Products
                   </NavDropdown.Item>

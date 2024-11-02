@@ -5,8 +5,8 @@ import { visualizer } from "rollup-plugin-visualizer"; // For analyzing bundle s
 export default defineConfig({
   server: {
     proxy: {
-      "/api": "http://localhost:3000",
-      "/uploads": "http://localhost:3000",
+      "/api": "http://localhost:5000",
+      "/uploads": "http://localhost:5000",
     },
   },
   plugins: [

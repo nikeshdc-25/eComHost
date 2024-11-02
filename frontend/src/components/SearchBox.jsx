@@ -2,9 +2,10 @@ import { Form, Button } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function SearchBox() {
+function SearchBox({ collapseHandler }) {
   const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
+
   const submitHandler = (e) => {
     e.preventDefault();
     if (keyword.trim()) {
@@ -13,7 +14,9 @@ function SearchBox() {
     } else {
       navigate("/");
     }
+    if (collapseHandler) collapseHandler();
   };
+
   return (
     <Form onSubmit={submitHandler} className="d-flex">
       <Form.Control

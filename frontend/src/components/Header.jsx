@@ -29,7 +29,7 @@ function Header() {
   const [userLogout, { isLoading }] = useUserLogoutMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState(false); // Track navbar state
+  const [expanded, setExpanded] = useState(false);
 
   const logoutHandler = async () => {
     try {
@@ -47,6 +47,8 @@ function Header() {
     navigate(path);
   };
 
+  const collapseHandler = () => setExpanded(false); // Collapse function for SearchBox
+
   return (
     <header style={{ position: "fixed", top: 0, width: "100%", zIndex: 1000 }}>
       <MarqueeBanner />
@@ -59,43 +61,24 @@ function Header() {
         onToggle={() => setExpanded(!expanded)}
       >
         <Container>
-        <NavLink
-            to="/"
-            className="navbar-brand"
-          >
+          <NavLink to="/" className="navbar-brand">
             <Image src={logo} alt="logo" width={50} />
             <b>VShop<sup>NP</sup></b>
           </NavLink>
-          <Navbar.Toggle
-            aria-controls="navbar"
-          />
+          <Navbar.Toggle aria-controls="navbar" />
           <Navbar.Collapse id="navbar">
             <Nav className="ms-auto">
-              <SearchBox />
-              <NavLink
-                to=""
-                className="nav-link"
-                onClick={() => handleNavClick("/")}
-              >
+              <SearchBox collapseHandler={collapseHandler} />
+              <NavLink to="" className="nav-link" onClick={() => handleNavClick("/")}>
                 <FaHouseUser /> Home
               </NavLink>
-              <NavLink
-                to="/cart"
-                className="nav-link"
-                onClick={() => handleNavClick("/cart")}
-              >
+              <NavLink to="/cart" className="nav-link" onClick={() => handleNavClick("/cart")}>
                 <FaShoppingCart /> Cart{" "}
                 {cartItems.length > 0 && (
-                  <Badge bg="success" pill>
-                    {cartItems.length}
-                  </Badge>
+                  <Badge bg="success" pill>{cartItems.length}</Badge>
                 )}
               </NavLink>
-              <NavLink
-                to="/wishlist"
-                className="nav-link"
-                onClick={() => handleNavClick("/wishlist")}
-              >
+              <NavLink to="/wishlist" className="nav-link" onClick={() => handleNavClick("/wishlist")}>
                 <FaHeart /> Wishlist
               </NavLink>
               {userInfo ? (
@@ -114,29 +97,19 @@ function Header() {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <NavLink
-                  to="/login"
-                  className="nav-link"
-                  onClick={() => handleNavClick("/login")}
-                >
+                <NavLink to="/login" className="nav-link" onClick={() => handleNavClick("/login")}>
                   <FaUser /> Login
                 </NavLink>
               )}
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown title={<FaUserCog />} id="admin-routes">
-                  <NavDropdown.Item
-                    onClick={() => handleNavClick("/admin/orders")}
-                  >
+                  <NavDropdown.Item onClick={() => handleNavClick("/admin/orders")}>
                     <FaSitemap /> Orders
                   </NavDropdown.Item>
-                  <NavDropdown.Item
-                    onClick={() => handleNavClick("/admin/users")}
-                  >
+                  <NavDropdown.Item onClick={() => handleNavClick("/admin/users")}>
                     <FaUserEdit /> Users
                   </NavDropdown.Item>
-                  <NavDropdown.Item
-                    onClick={() => handleNavClick("/admin/products")}
-                  >
+                  <NavDropdown.Item onClick={() => handleNavClick("/admin/products")}>
                     <FaBoxes /> Products
                   </NavDropdown.Item>
                 </NavDropdown>

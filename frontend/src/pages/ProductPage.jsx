@@ -1,7 +1,6 @@
 import { Image, Row, Col, ListGroup, Button, Form } from "react-bootstrap";
-import axios from "axios";
 import Rating from "../components/Rating";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { addItem } from "../slices/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +13,7 @@ import Message from "../components/Message";
 import { toast } from "react-toastify";
 import { MdCancel } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
-import { SideBySideMagnifier } from "react-image-magnifiers";
+import { SideBySideMagnifier } from "@datobs/react-image-magnifiers";
 
 
 function ProductPage() {
@@ -43,12 +42,6 @@ function ProductPage() {
     }
   };
 
-  // useEffect(() => {
-  //   axios
-  //     .get("/api/v1/products/" + id) // `/api/v1/products/${id}`
-  //     .then((resp) => setProduct(resp.data))
-  //     .catch((err) => console.log(err.message));
-  // }, []);
 
   const addToCartHandler = (item) => {
     dispatch(addItem(item));

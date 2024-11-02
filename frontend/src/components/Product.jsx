@@ -15,7 +15,6 @@ import { IoEyeSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../slices/cartSlice";
 import { toast } from "react-toastify";
-import { MdAddShoppingCart } from "react-icons/md";
 
 function Product({ product }) {
   const dispatch = useDispatch();
@@ -26,7 +25,7 @@ function Product({ product }) {
   const handleCloseQuickView = () => setShowQuickView(false);
 
   const addToCartHandler = (item) => {
-    // Check if the item is already in the cart
+    //check if the item is already in the cart
     const itemExists = cartItems.some((cartItem) => cartItem._id === item._id);
     if (itemExists) {
       toast.error(`Product is already in your cart.`);

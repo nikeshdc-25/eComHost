@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import FormContainer from "../components/FormContainer";
-import { FormGroup, Form, Button, Row, Col } from "react-bootstrap";
+import { FormGroup, Form, Button, Row, Col, FloatingLabel } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../slices/userApiSlice";
 import { toast } from "react-toastify";
@@ -36,28 +36,33 @@ const LoginPage = () => {
   return (
     <FormContainer>
       <Form onSubmit={submitHandler}>
-        <FormGroup controlId="email" className="my-3">
-          <Form.Label>Email</Form.Label>
+        <FloatingLabel
+          controlId="floatingEmail"
+          label="Email address"
+          className="mb-3"
+        >
           <Form.Control
             type="email"
-            placeholder="Enter email"
+            placeholder="name@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-          ></Form.Control>
-        </FormGroup>
-        <FormGroup controlId="password" className="my-3">
-          <Form.Label>Password</Form.Label>
+          />
+        </FloatingLabel>
+
+        <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
           <Form.Control
             type="password"
-            placeholder="Enter password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-          ></Form.Control>
-        </FormGroup>
+          />
+        </FloatingLabel>
+
         <Button type="submit" variant="primary" className="mt-2">
           Sign In
         </Button>
       </Form>
+      
       <Row className="py-3">
         <Col>
           New Customer? <Link to="/register">Register</Link>

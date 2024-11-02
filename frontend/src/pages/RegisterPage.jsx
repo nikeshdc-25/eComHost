@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import FormContainer from "../components/FormContainer";
-import { FormGroup, Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col, FloatingLabel } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSignupMutation } from "../slices/userApiSlice";
 import { toast } from "react-toastify";
@@ -26,10 +26,11 @@ const RegisterPage = () => {
       navigate(redirect);
     }
   }, [userInfo, redirect, navigate]);
+
   const submitHandler = async (e) => {
     e.preventDefault();
-    if(password != confirmPassword){
-      toast.error("Password did't match.");
+    if (password !== confirmPassword) {
+      toast.error("Password didn't match.");
       return;
     }
     try {
@@ -40,59 +41,61 @@ const RegisterPage = () => {
       toast.error(err.data.error);
     }
   };
+
   return (
     <FormContainer>
       <Form onSubmit={submitHandler}>
-        <FormGroup controlId="username" className="my-3">
-          <Form.Label>Name</Form.Label>
+        <FloatingLabel controlId="floatingUsername" label="Name" className="mb-3">
           <Form.Control
-            type="name"
+            type="text"
             placeholder="Enter username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-          ></Form.Control>
-        </FormGroup>
-        <FormGroup controlId="email" className="my-3">
-          <Form.Label>Email</Form.Label>
+          />
+        </FloatingLabel>
+
+        <FloatingLabel controlId="floatingEmail" label="Email" className="mb-3">
           <Form.Control
             type="email"
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-          ></Form.Control>
-        </FormGroup>
-        <FormGroup controlId="password" className="my-3">
-          <Form.Label>Password</Form.Label>
+          />
+        </FloatingLabel>
+
+        <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
           <Form.Control
             type="password"
             placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-          ></Form.Control>
-        </FormGroup>
-        <FormGroup controlId="cpassword" className="my-3">
-          <Form.Label>Confirm Password*</Form.Label>
+          />
+        </FloatingLabel>
+
+        <FloatingLabel controlId="floatingConfirmPassword" label="Confirm Password" className="mb-3">
           <Form.Control
             type="password"
             placeholder="Re-type password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-          ></Form.Control>
-        </FormGroup>
-        <FormGroup controlId="primaryPhone" className="my-3">
-          <Form.Label>Contact</Form.Label>
+          />
+        </FloatingLabel>
+
+        <FloatingLabel controlId="floatingPhone" label="Contact" className="mb-3">
           <Form.Control
             type="text"
-            placeholder="Enter phone no."
+            placeholder="Enter phone number"
             value={primaryPhone}
             onChange={(e) => setPrimaryPhone(e.target.value)}
             required
-          ></Form.Control>
-        </FormGroup>
+          />
+        </FloatingLabel>
+
         <Button type="submit" variant="warning" className="mt-2">
           Register
         </Button>
       </Form>
+
       <Row className="py-3">
         <Col>
           You Family Already? <Link to="/login">Login</Link>

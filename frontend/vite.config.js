@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
-import { visualizer } from "rollup-plugin-visualizer"; // For analyzing bundle size
 import react from "@vitejs/plugin-react";
+import { visualizer } from "rollup-plugin-visualizer"; // For analyzing bundle size
+
 export default defineConfig({
   server: {
     proxy: {

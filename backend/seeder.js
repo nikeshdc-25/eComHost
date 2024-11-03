@@ -3,7 +3,6 @@ import products from './data/products.js';
 import User from './models/userModel.js';
 import Product from './models/productModel.js';
 import connectDB from './config/db.js';
-import colors from "colors";
 
 process.loadEnvFile();      //To load .env
 

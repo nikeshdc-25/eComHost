@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { visualizer } from "rollup-plugin-visualizer"; // For analyzing bundle size
 
 export default defineConfig({
   server: {
@@ -10,13 +9,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    react(),
-    visualizer({
-      open: true, // Opens the stats report in the browser
-      filename: "bundle-visualizer.html",
-      template: "treemap", // Options: sunburst, treemap, network, circle
-    }),
-  ],
+    react()],
   build: {
     rollupOptions: {
       output: {

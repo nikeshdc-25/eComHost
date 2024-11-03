@@ -13,7 +13,6 @@ export default defineConfig({
     react(),
     visualizer({
       open: true, // Opens the stats report in the browser
-      filename: "bundle-visualizer.html",
       template: "treemap", // Options: sunburst, treemap, network, circle
     }),
   ],
@@ -31,7 +30,7 @@ export default defineConfig({
         },
       },
     },
-    minify: "esbuild",
-    sourcemap: true,
+    minify: "esbuild", // Use esbuild for minification
+    sourcemap: true, // Helpful for debugging and analysis
   },
 });

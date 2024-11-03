@@ -13,6 +13,7 @@ const addProduct = asyncHandler(async (req, res) => {
     description: "Sample Description",
     image: "/images/sample.jpg",
     price: 1,
+    discountedPrice: 0,
     brand: "Sample Brand",
     category: "Sample Category",
   });
@@ -96,6 +97,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   product.image = req.body.image || product.image;
   product.brand = req.body.brand || product.brand;
   product.price = req.body.price || product.price;
+  product.discountedPrice = req.body.discountedPrice || product.discountedPrice;
   product.countInStock = req.body.countInStock || product.countInStock;
   let updateProduct = await product.save();
 

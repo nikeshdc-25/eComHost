@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import FormContainer from "../components/FormContainer";
-import { FormGroup, Form, Button, Row, Col, FloatingLabel } from "react-bootstrap";
+import { Box, TextField, Button, Typography, Container, Link as MuiLink, Avatar, InputAdornment, IconButton } from "@mui/material";
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../slices/userApiSlice";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "../slices/authSlice";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -17,12 +19,17 @@ const LoginPage = () => {
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const redirect = sp.get("redirect") || "/";
+  const [showPassword, setShowPassword] = useState(false);
+
+const handleClickShowPassword = () => setShowPassword(!showPassword);
+
 
   useEffect(() => {
     if (userInfo) {
       navigate(redirect);
     }
   }, [userInfo, redirect, navigate]);
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -33,42 +40,78 @@ const LoginPage = () => {
       toast.error(err.data.error);
     }
   };
+
   return (
-    <FormContainer>
-      <Form onSubmit={submitHandler}>
-        <FloatingLabel
-          controlId="floatingEmail"
-          label="Email address"
-          className="mb-3"
-        >
-          <Form.Control
-            type="email"
-            placeholder="name@example.com"
+    <Container maxWidth="xs">
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          mt: 8,
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "success.main"}}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 1, mb: 3 }}>
+          Welcome, please sign in to continue
+        </Typography>
+        <Box component="form" onSubmit={submitHandler} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </FloatingLabel>
-
-        <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
-          <Form.Control
-            type="password"
-            placeholder="Password"
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type={showPassword ? "text" : "password"}
+            id="password"
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
-        </FloatingLabel>
-
-        <Button type="submit" variant="primary" className="mt-2">
-          Sign In
-        </Button>
-      </Form>
-      
-      <Row className="py-3">
-        <Col>
-          New Customer? <Link to="/register">Register</Link>
-        </Col>
-      </Row>
-    </FormContainer>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="success"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign In
+          </Button>
+          <Typography variant="body2" align="center">
+            New Customer?{" "}
+            <MuiLink component={Link} to="/register" variant="body2">
+              Register
+            </MuiLink>
+          </Typography>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 

@@ -13,11 +13,11 @@ export default defineConfig({
     react(),
     visualizer({
       open: true, // Opens the stats report in the browser
+      filename: "bundle-visualizer.html",
       template: "treemap", // Options: sunburst, treemap, network, circle
     }),
   ],
   build: {
-    outDir: 'dist', 
     rollupOptions: {
       output: {
         manualChunks(id) {

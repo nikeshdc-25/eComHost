@@ -3,6 +3,7 @@ import notFoundHandler from "./middleware/notFoundMiddleware.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 import logger from "./middleware/loggerMiddleware.js";
 
+
 //routers import
 import userRouter from "./routes/userRouter.js";
 import productRouter from "./routes/productRouter.js";

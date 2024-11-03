@@ -1,4 +1,4 @@
-import { Image, Row, Col, ListGroup, Button, Form } from "react-bootstrap";
+import { Row, Col, ListGroup, Button, Form } from "react-bootstrap";
 import Rating from "../components/Rating";
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";

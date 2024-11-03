@@ -31,7 +31,7 @@ export default defineConfig({
         },
       },
     },
-    minify: "esbuild", // Use esbuild for minification
-    sourcemap: true, // Helpful for debugging and analysis
+    minify: "esbuild",
+    sourcemap: true,
   },
 });

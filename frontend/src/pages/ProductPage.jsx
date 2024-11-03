@@ -1,6 +1,6 @@
 import { Image, Row, Col, ListGroup, Button, Form } from "react-bootstrap";
 import Rating from "../components/Rating";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { addItem } from "../slices/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,18 +15,23 @@ import { MdCancel } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
 import { SideBySideMagnifier } from "@datobs/react-image-magnifiers";
 
-
 function ProductPage() {
   const { id } = useParams();
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  // const [product, setProduct] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { data: product, isLoading, error } = useGetProductByIdQuery(id);
   const [addReview, { isLoading: reviewLoading }] = useAddReviewMutation();
   const { userInfo } = useSelector((state) => state.auth);
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    if (product && product.reviews) {
+      setReviews(product.reviews);
+    }
+  }, [product]);
 
   const addReviewHandler = async (e) => {
     e.preventDefault();
@@ -37,16 +42,17 @@ function ProductPage() {
         comment,
       }).unwrap();
       toast.success(resp.message);
+      setReviews([...reviews, { name: userInfo.name, rating, comment }]); // Update local reviews
     } catch (err) {
       toast.error(err.data.error);
     }
   };
 
-
   const addToCartHandler = (item) => {
     dispatch(addItem(item));
     navigate("/cart");
   };
+
   return (
     <>
       {isLoading ? (
@@ -58,7 +64,7 @@ function ProductPage() {
           <Meta title={product.name} description={product.description} />
           <Row className="my-3">
             <Col md={5}>
-            <SideBySideMagnifier
+              <SideBySideMagnifier
                 imageSrc={product.image}
                 alwaysInPlace={true}
                 overlayOpacity={0.5}
@@ -101,8 +107,7 @@ function ProductPage() {
                         {product.countInStock > 0 ? (
                           <x>In Stock <FaCheckCircle color="green" size={20}/></x>
                         ) : (
-                            <x>Out of Stock <MdCancel color="red" size={20}/></x>
-                            
+                          <x>Out of Stock <MdCancel color="red" size={20}/></x>
                         )}
                       </strong>
                     </Col>
@@ -134,15 +139,16 @@ function ProductPage() {
             </Col>
           </Row>
           <Row className="my-3">
-            <Col md={6} className="reviews" key={product.reviews.length}>
+            <Col md={6} className="reviews">
               <h2>Customer Reviews</h2>
-              {product.reviews.length > 0 ? (
-                product.reviews.map((review) => (
-                  <>
+              {reviews.length > 0 ? (
+                reviews.map((review) => (
+                  <div key={review._id}>
                     <strong>{review.name}</strong>
                     <Rating value={review.rating} />
                     <p>{review.comment}</p>
-                  </>
+                    <hr />
+                  </div>
                 ))
               ) : (
                 <Message>No Reviews Yet</Message>
@@ -162,7 +168,7 @@ function ProductPage() {
                         <option value={1}>1 - Poor</option>
                         <option value={2}>2 - Satisfactory</option>
                         <option value={3}>3 - Good</option>
-                        <option value={4}>4 - Very Good </option>
+                        <option value={4}>4 - Very Good</option>
                         <option value={5}>5 - Excellent</option>
                       </Form.Control>
                     </Form.Group>

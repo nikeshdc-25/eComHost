@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Button,
   Card,
   CardFooter,
   Col,
@@ -15,6 +14,7 @@ import { IoEyeSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../slices/cartSlice";
 import { toast } from "react-toastify";
+import { Button } from "@mui/joy";
 
 function Product({ product }) {
   const dispatch = useDispatch();
@@ -37,37 +37,43 @@ function Product({ product }) {
   return (
     <>
       <Card className="my-3 product-card">
+        <CardFooter>
+          <Card.Text as="div">
+            <strong className="category">{product.category}</strong>
+          </Card.Text>
+        </CardFooter>
         <Link
           to={`/product/${product._id}`}
           title={`${product.name}`}
           className="nav-link"
         >
-          <Card.Img src={product.image} variant="top" />
+          <Card.Img src={product.image} className="image" variant="top" />
         </Link>
         <Card.Body>
-          <Card.Text as="div">
-            <strong className="product-title">{product.name}</strong>
-          </Card.Text>
-          <Card.Text as="div">
-            <Rating value={product.rating} text={product.numReviews}>
+        <Card.Text as="div">
+            <Rating value={product.rating}>
               {product.name}
             </Rating>
           </Card.Text>
-          <Card.Text as="h3" className="product-price">
+          <Card.Text as="div">
+            <b className="title">{product.name}</b>
+          </Card.Text>
+          <Card.Text as="h3" className="price">
             Rs.{product.price}
           </Card.Text>
         </Card.Body>
         <CardFooter>
-          <div className="d-flex justify-content-start gap-2">
+          <div className="d-flex justify-content-center gap-2">
+          <Button variant="outlined" color="success">Buy Now</Button>
             <Button
-              variant="dark"
+              variant="plain"
+              color="danger"
               disabled={product.countInStock <= 0}
               onClick={() => addToCartHandler({ ...product, qty: 1 })}
             >
               Add to Cart
             </Button>
-            <Button variant="success">Quick Pay</Button>
-            <button className="btn ms-auto" onClick={handleShowQuickView}>
+            <button className="btn ms-auto" title="Quick View" onClick={handleShowQuickView}>
               <IoEyeSharp className="view" />
             </button>
           </div>

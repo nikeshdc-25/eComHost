@@ -6,7 +6,7 @@ function Footer() {
     <footer>
       <Container>
         <hr></hr>
-        <p className="text-center py-3">vShop Nepal &copy; {currentYear}</p>
+        <p className="text-center py-3">Vapour Nepal &copy; {currentYear}</p>
       </Container>
     </footer>
   );

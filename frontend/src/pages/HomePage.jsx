@@ -1,6 +1,5 @@
 import { Row, Col } from "react-bootstrap";
 import Product from "../components/Product";
-import { useState, useEffect } from "react";
 import { useLoaderData, useParams } from "react-router-dom";
 import { useGetProductsQuery } from "../slices/productSlice";
 import Message from "../components/Message";
@@ -40,7 +39,7 @@ const HomePage = () => {
         <>
           <Row>
             {data.products.map((product) => (
-              <Col sm={12} md={6} lg={4} xl={3} key={product._id}>
+              <Col xs={12} sm={6} md={6} lg={4} xl={3} key={product._id}>
                 <Product product={product} />
               </Col>
             ))}

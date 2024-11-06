@@ -1,9 +1,10 @@
-.product-title{
+.title{
     text-overflow:ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    color: rgb(82, 82, 82);
+    color: rgb(64, 64, 64);
     display: block;
+    font-family:'Segoe UI', Geneva, Verdana, sans-serif;
 }
 .product-card{
     box-shadow: 0 .5rem 1.2rem rgba(0,0,0,.2);
@@ -14,10 +15,24 @@
     box-shadow: 0 .5rem 1.2rem rgba(0,0,0,.6);
 }
 
-.product-price{
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: rgb(82, 82, 82);
-    font-size: x-large;
+.price{
+    color: rgb(62, 0, 0);
+    font-size:x-large;
+    font-family: serif;
+}
+
+.category{
+  font-size: small;
+  font-weight: 700;
+  color: rgb(122, 122, 122);
+}
+
+.image{
+  object-fit: contain;
+}
+
+.product-card .image {
+  aspect-ratio: 5 / 4;  /* You can adjust this ratio as needed */
 }
 
 /*its for view icon*/

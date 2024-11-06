@@ -11,7 +11,7 @@ function MarqueeBanner() {
           📞 Contact Us: +977-9848050240
         </span>
         <span style={{ padding: "0 2rem", fontWeight: "bold" }}>
-          🚚 Free Shipping Over Rs. 500
+          🚚 Free Shipping Over Rs. 1000
         </span>
         <span style={{ padding: "0 2rem", fontWeight: "bold" }}>
           🎉 Use Promo Code: 123456

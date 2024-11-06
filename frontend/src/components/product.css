@@ -21,6 +21,10 @@
     font-family: serif;
 }
 
+.discount{
+  color: rgb(0, 151, 20);
+}
+
 .category{
   font-size: small;
   font-weight: 700;

@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Card,
-  CardFooter,
-  Col,
-  ListGroup,
-  Modal,
-  Row,
-} from "react-bootstrap";
+import { Card, CardFooter, Col, ListGroup, Modal, Row } from "react-bootstrap";
 import Rating from "./Rating";
 import "./product.css";
 import { Link } from "react-router-dom";
@@ -15,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../slices/cartSlice";
 import { toast } from "react-toastify";
 import { Button } from "@mui/joy";
+import { nepaliRupeesFormat } from "../utils/rupeesUtils";
+
 
 function Product({ product }) {
   const dispatch = useDispatch();
@@ -50,21 +45,30 @@ function Product({ product }) {
           <Card.Img src={product.image} className="image" variant="top" />
         </Link>
         <Card.Body>
-        <Card.Text as="div">
-            <Rating value={product.rating}>
-              {product.name}
-            </Rating>
+          <Card.Text as="div">
+            <Rating value={product.rating}>{product.name}</Rating>
           </Card.Text>
           <Card.Text as="div">
             <b className="title">{product.name}</b>
           </Card.Text>
           <Card.Text as="h3" className="price">
-            Rs.{product.price}
+            {product.discount > 0 ? (
+              <>
+                <s>Rs.{nepaliRupeesFormat(product.price)}</s>{" "}
+                <span className="discount">
+                  Rs. {nepaliRupeesFormat(product.discountedPrice)}
+                </span>
+              </>
+            ) : (
+              <>Rs. {nepaliRupeesFormat(product.price)}</>
+            )}
           </Card.Text>
         </Card.Body>
         <CardFooter>
           <div className="d-flex justify-content-center gap-2">
-          <Button variant="outlined" color="success">Buy Now</Button>
+            <Button variant="outlined" color="success">
+              Buy Now
+            </Button>
             <Button
               variant="plain"
               color="danger"
@@ -73,7 +77,11 @@ function Product({ product }) {
             >
               Add to Cart
             </Button>
-            <button className="btn ms-auto" title="Quick View" onClick={handleShowQuickView}>
+            <button
+              className="btn ms-auto"
+              title="Quick View"
+              onClick={handleShowQuickView}
+            >
               <IoEyeSharp className="view" />
             </button>
           </div>

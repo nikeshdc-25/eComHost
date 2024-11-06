@@ -16,7 +16,7 @@ function ProductEditPage() {
   const [category, setCategory] = useState("");
   const [image, setImage] = useState(null);
   const [price, setPrice] = useState(0);
-  const [discountedPrice, setdiscountedPrice] = useState(0);
+  const [discount, setDiscount] = useState(0);
   const [countInStock, setCountInStock] = useState(0);
   const { id } = useParams();
   const {
@@ -38,7 +38,7 @@ function ProductEditPage() {
       setBrand(product.brand);
       setCategory(product.category);
       setPrice(product.price);
-      setdiscountedPrice(product.discountedPrice);
+      setDiscount(product.discount);
       setCountInStock(product.countInStock);
     }
   }, [product]);
@@ -53,7 +53,7 @@ function ProductEditPage() {
         description,
         image,
         price,
-        discountedPrice,
+        discount,
         countInStock,
       }).unwrap();
       navigate("/admin/products");
@@ -114,12 +114,12 @@ function ProductEditPage() {
               onChange={(e) => setPrice(e.target.value)}
             />
           </Form.Group>
-          <Form.Group controlId="discountedPrice" className="my-2">
+          <Form.Group controlId="discount" className="my-2">
             <Form.Label>Discount</Form.Label>
             <Form.Control
               type="text"
-              value={discountedPrice}
-              onChange={(e) => setdiscountedPrice(e.target.value)}
+              value={discount}
+              onChange={(e) => setDiscount(e.target.value)}
             />
           </Form.Group>
           <Form.Group controlId="countInStock" className="my-2">

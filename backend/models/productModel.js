@@ -37,9 +37,13 @@ const productSchema = new mongoose.Schema(
       required: true,
       min: 1,
     },
+    discount: {
+      type: Number,
+      default: 0,
+    },
     discountedPrice: {
       type: Number,
-      default: 0
+      default: 0,
     },
     countInStock: {
       type: Number,
@@ -57,6 +61,15 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+productSchema.pre("save", function (next) {
+  if (this.discount > 0) {
+    this.discountedPrice = this.price - this.discount;
+  } else {
+    this.discountedPrice = this.price;
+  }
+  next();
+});
 
 const Product = mongoose.model("Product", productSchema);
 export default Product;

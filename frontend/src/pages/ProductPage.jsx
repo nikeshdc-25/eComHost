@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { MdCancel } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
 import { SideBySideMagnifier } from "@datobs/react-image-magnifiers";
+import { nepaliRupeesFormat } from "../utils/rupeesUtils";
 
 function ProductPage() {
   const { id } = useParams();
@@ -79,7 +80,7 @@ function ProductPage() {
                   <h3>{product.name}</h3>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <strong>${product.price}</strong>
+                  <strong>Rs. {nepaliRupeesFormat(product.price)}</strong>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Rating value={product.rating} text={product.numReviews} />
@@ -95,7 +96,7 @@ function ProductPage() {
                   <Row>
                     <Col>Price</Col>
                     <Col>
-                      <strong>${product.price}</strong>
+                      <strong>Rs. {nepaliRupeesFormat(product.price)}</strong>
                     </Col>
                   </Row>
                 </ListGroup.Item>

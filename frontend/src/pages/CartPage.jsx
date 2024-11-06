@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Col,
-  ListGroup,
-  Row,
-  Image,
-  Form,
-  Button,
-} from "react-bootstrap";
+import { Col, ListGroup, Row, Image, Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem, removeItem } from "../slices/cartSlice";
 import { FaTrash } from "react-icons/fa";
@@ -15,7 +8,8 @@ import Message from "../components/Message";
 import { toast } from "react-toastify";
 import { TbTruckDelivery } from "react-icons/tb";
 import "./CartPage.css";
-
+import { nepaliRupeesFormat } from "../utils/rupeesUtils";
+ 
 
 const CartPage = () => {
   const { cartItems, shippingCharge, totalPrice, itemPrice } = useSelector(
@@ -65,7 +59,19 @@ const CartPage = () => {
                         <strong>{item.name}</strong>
                       </Link>
                       <strong> Price: </strong>
-                      <span>${(item.qty * item.price).toFixed(2)}</span>
+                      <span>
+                        {item.discount > 0 ? (
+                          <>
+                            Rs.<s>{nepaliRupeesFormat(item.qty * item.price)}</s>
+                            <span>
+                              {" "}
+                              {nepaliRupeesFormat(item.qty * item.discountedPrice)}
+                            </span>
+                          </>
+                        ) : (
+                          <span>{nepaliRupeesFormat(item.qty * item.price)}</span>
+                        )}
+                      </span>
                     </Col>
                     <Col md={2}>
                       <Form.Control
@@ -94,7 +100,9 @@ const CartPage = () => {
             </ListGroup>
           </Col>
           <Col md={4}>
-          <b className="deliveryMsg"><TbTruckDelivery size={50}/> Free Delivery Above Rs. 500 Spent.</b> 
+            <b className="deliveryMsg">
+              <TbTruckDelivery size={50} /> Free Delivery Above Rs. 500 Spent.
+            </b>
 
             <ListGroup>
               <ListGroup.Item>
@@ -109,11 +117,13 @@ const CartPage = () => {
                   <Col>
                     {discount === 5 ? (
                       <>
-                        <s>${itemPrice.toFixed(2)}</s> $
-                        <b style={{color: 'green'}}>{(itemPrice - discount).toFixed(2)}</b>
+                        Rs.<s>{nepaliRupeesFormat(itemPrice)}</s>
+                        <b style={{ color: "green" }}>
+                          {nepaliRupeesFormat(itemPrice - discount)}
+                        </b>
                       </>
                     ) : (
-                      `$${itemPrice.toFixed(2)}`
+                      `Rs.${nepaliRupeesFormat(itemPrice)}`
                     )}
                   </Col>
                 </Row>
@@ -122,10 +132,10 @@ const CartPage = () => {
                 <Row>
                   <Col>Shipping Charge</Col>
                   <Col>
-                    {totalPrice >= 100 ? (
+                    {!shippingCharge > 0 ? (
                       <em>*Free Shipping</em>
                     ) : (
-                      `$${shippingCharge}`
+                      `Rs. ${shippingCharge}`
                     )}
                   </Col>
                 </Row>
@@ -136,7 +146,7 @@ const CartPage = () => {
                     <strong>Total</strong>
                   </Col>
                   <Col>
-                    <strong>${totalPrice - discount}</strong>
+                    <strong>Rs. {nepaliRupeesFormat(totalPrice - discount)}</strong>
                   </Col>
                 </Row>
               </ListGroup.Item>

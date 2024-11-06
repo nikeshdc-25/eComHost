@@ -10,6 +10,7 @@ import Message from "../../components/Message";
 import { toast } from "react-toastify";
 import { Link, useParams } from "react-router-dom";
 import Paginate from "../../components/Paginate";
+import { nepaliRupeesFormat } from "../../utils/rupeesUtils";
 
 const ProductsListPage = () => {
   const { pageNumber } = useParams();
@@ -26,6 +27,7 @@ const ProductsListPage = () => {
       toast.error(err.data.error);
     }
   };
+
   const deleteProductHandler = async (id) => {
     if (window.confirm("Are you sure you want to delete the product?")) {
       try {
@@ -36,6 +38,7 @@ const ProductsListPage = () => {
       }
     }
   };
+
   return (
     <>
       <Row className="align-items-center mb-3">
@@ -73,8 +76,8 @@ const ProductsListPage = () => {
                   <tr key={product._id}>
                     <td>{product._id}</td>
                     <td>{product.name}</td>
-                    <td>Rs.{product.price}</td>
-                    <td>Rs.{product.discountedPrice}</td>
+                    <td>Rs. {nepaliRupeesFormat(product.price)}</td>
+                    <td>Rs. {nepaliRupeesFormat(product.discount)}</td>
                     <td>{product.brand}</td>
                     <td>{product.category}</td>
                     <td>{product.countInStock}</td>

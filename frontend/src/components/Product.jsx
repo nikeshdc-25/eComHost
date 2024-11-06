@@ -7,8 +7,10 @@ import { IoEyeSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../slices/cartSlice";
 import { toast } from "react-toastify";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button } from "@mui/joy";
 import { nepaliRupeesFormat } from "../utils/rupeesUtils";
+import BoltIcon from '@mui/icons-material/Bolt';
 
 
 function Product({ product }) {
@@ -66,17 +68,19 @@ function Product({ product }) {
         </Card.Body>
         <CardFooter>
           <div className="d-flex justify-content-center gap-2">
-            <Button variant="outlined" color="success">
-              Buy Now
-            </Button>
-            <Button
+          <Button
               variant="plain"
               color="danger"
+              className="btn me-auto"
               disabled={product.countInStock <= 0}
               onClick={() => addToCartHandler({ ...product, qty: 1 })}
             >
-              Add to Cart
+              <AddShoppingCartIcon />
             </Button>
+            <Button variant="outlined" color="success">
+              <BoltIcon />Buy Now
+            </Button>
+           
             <button
               className="btn ms-auto"
               title="Quick View"
@@ -112,7 +116,7 @@ function Product({ product }) {
                 <ListGroup.Item>
                   <strong>{product.name}</strong>
                 </ListGroup.Item>
-                <ListGroup.Item>Price: Rs.{product.price}</ListGroup.Item>
+                <ListGroup.Item>Price: Rs. {nepaliRupeesFormat(product.price)}</ListGroup.Item>
                 <ListGroup.Item>Stock: {product.countInStock}</ListGroup.Item>
                 <ListGroup.Item className="product-rating">
                   <Rating

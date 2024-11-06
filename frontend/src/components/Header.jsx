@@ -63,7 +63,7 @@ function Header() {
         <Container>
           <NavLink to="/" className="navbar-brand">
             <Image src={logo} alt="logo" width={50} />
-            <b>VShop<sup>NP</sup></b>
+            <span className="vapournepal">vapournepal</span>
           </NavLink>
           <Navbar.Toggle aria-controls="navbar" />
           <Navbar.Collapse id="navbar">

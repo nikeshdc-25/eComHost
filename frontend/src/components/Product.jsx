@@ -72,6 +72,7 @@ function Product({ product }) {
               variant="plain"
               color="danger"
               className="btn me-auto"
+              title="Add to Cart"
               disabled={product.countInStock <= 0}
               onClick={() => addToCartHandler({ ...product, qty: 1 })}
             >

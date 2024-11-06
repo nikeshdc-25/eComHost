@@ -17,7 +17,7 @@ function MarqueeBanner() {
           🎉 Use Promo Code: 123456
         </span>
         <span style={{ padding: "0 2rem", fontWeight: "bold" }}>
-          📦 Deliver Only Inside Valley
+          📦 Delivery Only Inside Valley
         </span>
       </Marquee>
     </div>

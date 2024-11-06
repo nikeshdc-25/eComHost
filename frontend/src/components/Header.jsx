@@ -53,7 +53,7 @@ function Header() {
     <header style={{ position: "fixed", top: 0, width: "100%", zIndex: 1000 }}>
       <MarqueeBanner />
       <Navbar
-        expand="lg"
+        expand="xl"
         style={{ backgroundColor: "#f8f9fa" }}
         variant="light"
         collapseOnSelect

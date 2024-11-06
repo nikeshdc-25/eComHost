@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, CardFooter, Col, ListGroup, Modal, Row } from "react-bootstrap";
+import { Col, ListGroup, Modal, Row } from "react-bootstrap";
 import Rating from "./Rating";
 import "./product.css";
 import { Link } from "react-router-dom";
@@ -7,11 +7,19 @@ import { IoEyeSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../slices/cartSlice";
 import { toast } from "react-toastify";
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { Button } from "@mui/joy";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import {
+  AspectRatio,
+  Button,
+  ButtonGroup,
+  Card,
+  CardContent,
+  CardOverflow,
+  Typography,
+} from "@mui/joy";
 import { nepaliRupeesFormat } from "../utils/rupeesUtils";
-import BoltIcon from '@mui/icons-material/Bolt';
-
+import BoltIcon from "@mui/icons-material/Bolt";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 function Product({ product }) {
   const dispatch = useDispatch();
@@ -33,66 +41,70 @@ function Product({ product }) {
   };
   return (
     <>
-      <Card className="my-3 product-card">
-        <CardFooter>
-          <Card.Text as="div">
-            <strong className="category">{product.category}</strong>
-          </Card.Text>
-        </CardFooter>
-        <Link
-          to={`/product/${product._id}`}
-          title={`${product.name}`}
-          className="nav-link"
-        >
-          <Card.Img src={product.image} className="image" variant="top" />
-        </Link>
-        <Card.Body>
-          <Card.Text as="div">
-            <Rating value={product.rating}>{product.name}</Rating>
-          </Card.Text>
-          <Card.Text as="div">
-            <b className="title">{product.name}</b>
-          </Card.Text>
-          <Card.Text as="h3" className="price">
+      <Card className="my-2 product-card" sx={{ width: 300, maxWidth: "100%" }}>
+        <CardOverflow>
+          <Link to={`/product/${product._id}`} className="nav-link">
+            <AspectRatio sx={{ minWidth: 150 }}>
+              <img src={product.image} />
+            </AspectRatio>
+          </Link>
+        </CardOverflow>
+        <CardContent>
+        <Typography level="body-xs"><b>By</b> {product.brand} | {product.category}</Typography>
+          <Typography level="body-xs"></Typography>
+          <Link to={`/product/${product._id}`} className="nav-link">
+            <Typography level="body-md">
+              <b className="title">{product.name}</b>
+            </Typography>
+          </Link>
+          <Typography level="title-lg" sx={{ mt: 1, fontWeight: "xl" }}>
             {product.discount > 0 ? (
               <>
-                <s>Rs.{nepaliRupeesFormat(product.price)}</s>{" "}
-                <span className="discount">
+                <s style={{ fontSize: "0.8rem" }}>
+                  Rs.{nepaliRupeesFormat(product.price)}
+                </s>{" "}
+                <span className="discount" style={{ fontSize: "1rem" }}>
                   Rs. {nepaliRupeesFormat(product.discountedPrice)}
                 </span>
               </>
             ) : (
               <>Rs. {nepaliRupeesFormat(product.price)}</>
             )}
-          </Card.Text>
-        </Card.Body>
-        <CardFooter>
-          <div className="d-flex justify-content-center gap-2">
+          </Typography>
+          <CardOverflow>
+            <Typography level="body-sm">
+              (Only <b>{product.countInStock}</b> left in stock!){" "}
+              <Button
+                variant="plain"
+                color="danger"
+                title="Add to Cart"
+                disabled={product.countInStock <= 0}
+                onClick={() => addToCartHandler({ ...product, qty: 1 })}
+              >
+                <AddShoppingCartIcon style={{ fontSize: "1.4rem" }} />
+              </Button>
+              <Button
+                variant="plain"
+                color="neutral"
+                title="Quick View"
+                onClick={handleShowQuickView}
+              >
+                <VisibilityIcon style={{ fontSize: "1.4rem" }} />
+              </Button>
+            </Typography>
+          </CardOverflow>
+        </CardContent>
+        <CardOverflow>
           <Button
-              variant="plain"
-              color="danger"
-              className="btn me-auto"
-              title="Add to Cart"
-              disabled={product.countInStock <= 0}
-              onClick={() => addToCartHandler({ ...product, qty: 1 })}
-            >
-              <AddShoppingCartIcon />
-            </Button>
-            <Button variant="outlined" color="success">
-              <BoltIcon />Buy Now
-            </Button>
-           
-            <button
-              className="btn ms-auto"
-              title="Quick View"
-              onClick={handleShowQuickView}
-            >
-              <IoEyeSharp className="view" />
-            </button>
-          </div>
-        </CardFooter>
+            color="success"
+            variant="solid"
+            disabled={product.countInStock <= 0}
+          >
+            <BoltIcon />
+            Buy Now
+          </Button>
+        </CardOverflow>
       </Card>
-
       <Modal
         show={showQuickView}
         onHide={handleCloseQuickView}
@@ -117,7 +129,9 @@ function Product({ product }) {
                 <ListGroup.Item>
                   <strong>{product.name}</strong>
                 </ListGroup.Item>
-                <ListGroup.Item>Price: Rs. {nepaliRupeesFormat(product.price)}</ListGroup.Item>
+                <ListGroup.Item>
+                  Price: Rs. {nepaliRupeesFormat(product.price)}
+                </ListGroup.Item>
                 <ListGroup.Item>Stock: {product.countInStock}</ListGroup.Item>
                 <ListGroup.Item className="product-rating">
                   <Rating

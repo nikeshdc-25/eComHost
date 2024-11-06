@@ -39,7 +39,7 @@ const HomePage = () => {
         <>
           <Row>
             {data.products.map((product) => (
-              <Col xs={12} sm={6} md={6} lg={4} xl={3} key={product._id}>
+              <Col xs={6} sm={6} md={6} lg={3} xl={3} key={product._id}>
                 <Product product={product} />
               </Col>
             ))}

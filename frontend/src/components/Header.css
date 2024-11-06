@@ -7,15 +7,16 @@
 }
 
 .navbar {
-    background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .vapournepal {
   font-weight: 700;
   letter-spacing: 2px;
-  font-family: cursive;
-  background-image: linear-gradient(to right, #0c1f09, #00660c);    background-clip: text;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-image: linear-gradient(to top, #0c1f09, #009311);
+  background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
 }

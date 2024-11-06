@@ -33,6 +33,7 @@ const signup = asyncHandler(async (req, res, next) => {
   // let salt = await bcrypt.genSalt(10);
   // let hashedPassword = await bcrypt.hash(password, salt);
   let user = await User.create(req.body);
+  createToken(res, user._id);
   res.send({
     message: "User registered Successfully!",
     user: {
@@ -42,7 +43,6 @@ const signup = asyncHandler(async (req, res, next) => {
       isAdmin: user.isAdmin,
     },
   });
-  createToken(res, user._id);
 });
 
 //@desc login for existing user

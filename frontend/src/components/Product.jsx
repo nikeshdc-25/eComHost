@@ -42,7 +42,7 @@ function Product({ product }) {
   };
   return (
     <>
-      <Card className="my-2 product-card" sx={{ width: 350, maxWidth: "100%" }}>
+      <Card className="my-2 product-card" sx={{ width: 400, maxWidth: "100%" }}>
         <CardOverflow>
           <Link to={`/product/${product._id}`} className="nav-link">
             <AspectRatio sx={{ minWidth: 150 }} objectFit="contain">

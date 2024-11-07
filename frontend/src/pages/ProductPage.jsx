@@ -1,4 +1,4 @@
-import { Row, Col, ListGroup, Button, Form } from "react-bootstrap";
+import { Row, Col, ListGroup, Form } from "react-bootstrap";
 import Rating from "../components/Rating";
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
@@ -15,6 +15,10 @@ import { MdCancel } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
 import { SideBySideMagnifier } from "@datobs/react-image-magnifiers";
 import { nepaliRupeesFormat } from "../utils/rupeesUtils";
+import { Button, ButtonGroup, Divider } from "@mui/joy";
+import BoltIcon from "@mui/icons-material/Bolt";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+
 
 function ProductPage() {
   const { id } = useParams();
@@ -80,11 +84,38 @@ function ProductPage() {
                   <h3>{product.name}</h3>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <strong>Rs. {nepaliRupeesFormat(product.price)}</strong>
+                  <Row>
+                    <Col>
+                    <strong>Brand</strong>
+                    </Col>
+                    <Col>
+                    {product.brand}
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                <Row>
+                    <Col>
+                    <strong>Category</strong>
+                    </Col>
+                    <Col>
+                    {product.category}
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                <Row>
+                    <Col>
+                    <strong>Total Puffs</strong>
+                    </Col>
+                    <Col>
+                    N/A
+                    </Col>
+                  </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Rating value={product.rating} text={product.numReviews} />
-                </ListGroup.Item>
+                </ListGroup.Item> 
                 <ListGroup.Item>
                   <span>{product.description}</span>
                 </ListGroup.Item>
@@ -126,15 +157,32 @@ function ProductPage() {
                   </Form.Control>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <Button
-                    variant="dark"
-                    disabled={product.countInStock <= 0}
-                    onClick={() =>
-                      addToCartHandler({ ...product, qty: Number(qty) })
-                    }
-                  >
-                    Add To Cart
-                  </Button>
+                <ButtonGroup
+            color="success"
+            sx={{
+              "--ButtonGroup-radius": "40px",
+              justifyContent: "center",
+            }}
+          >
+              <Button
+                variant="outlined"
+                color="danger"
+                disabled={product.countInStock <= 0}
+                onClick={() => addToCartHandler({ ...product, qty: 1 })}
+              >
+                <AddShoppingCartIcon style={{ fontSize: "1.4rem" }} /> Add to Cart
+              </Button>
+            <Divider />
+            <Button
+              variant="solid"
+              color="success"
+              disabled={product.countInStock <= 0}
+              className="ml-5"
+            >
+              <BoltIcon />
+              Buy Now
+            </Button>
+            </ButtonGroup>
                 </ListGroup.Item>
               </ListGroup>
             </Col>

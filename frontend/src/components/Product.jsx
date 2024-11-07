@@ -10,7 +10,6 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import {
   AspectRatio,
   Button,
-  ButtonGroup,
   Card,
   CardContent,
   CardOverflow,
@@ -19,17 +18,16 @@ import {
 } from "@mui/joy";
 import { nepaliRupeesFormat } from "../utils/rupeesUtils";
 import BoltIcon from "@mui/icons-material/Bolt";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import Divider from "@mui/joy/Divider";
 
 function Product({ product }) {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
+  /*
   const [showQuickView, setShowQuickView] = useState(false);
 
   const handleShowQuickView = () => setShowQuickView(true);
   const handleCloseQuickView = () => setShowQuickView(false);
-
+*/
   const addToCartHandler = (item) => {
     //check if the item is already in the cart
     const itemExists = cartItems.some((cartItem) => cartItem._id === item._id);
@@ -42,17 +40,28 @@ function Product({ product }) {
   };
   return (
     <>
-      <Card className="my-2 product-card" sx={{ width: 400, maxWidth: "100%" }}>
+      <Card className="my-2 product-card" sx={{ flex: '1 1 calc(50% - 1rem)', minWidth: 150, maxWidth: '100%' }}>
         <CardOverflow>
-          <Link to={`/product/${product._id}`} className="nav-link">
-            <AspectRatio sx={{ minWidth: 150 }} objectFit="contain">
+          <AspectRatio ratio={1.3} sx={{ minWidth: 150 }}>
+            <Link to={`/product/${product._id}`} className="nav-link">
               <img src={product.image} />
-            </AspectRatio>
-          </Link>
+            </Link>
+            <Tooltip arrow title="Add to Cart">
+            <Button
+              variant="plain"
+              color="danger"
+              disabled={product.countInStock <= 0}
+              onClick={() => addToCartHandler({ ...product, qty: 1 })}
+            >
+              <AddShoppingCartIcon style={{ fontSize: "1.4rem" }} />
+            </Button>
+            </Tooltip>
+          </AspectRatio>
         </CardOverflow>
+
         <CardContent>
           <Typography level="body-xs">
-            From <b>{product.brand}</b> | {product.category}
+            From <b>{product.brand}</b>
           </Typography>
           <Typography level="body-xs" className="pName"></Typography>
           <Link to={`/product/${product._id}`} className="nav-link">
@@ -67,64 +76,37 @@ function Product({ product }) {
           >
             {product.discount > 0 ? (
               <>
-                <s style={{ fontSize: "0.8rem" }} className="price">
-                  Rs.{nepaliRupeesFormat(product.price)}
+                <span style={{ fontSize: "0.9rem" }}>Rs.</span><s style={{ fontSize: "0.8rem" }} className="price">
+                  {nepaliRupeesFormat(product.price)}
                 </s>{" "}
-                <span className="discount" style={{ fontSize: "1rem" }}>
-                  Rs. {nepaliRupeesFormat(product.discountedPrice)}
+                <span className="discount" style={{ fontSize: "0.9rem" }}>
+                   {nepaliRupeesFormat(product.discountedPrice)}
                 </span>
               </>
             ) : (
-              <span className="price">
+              <span style={{ fontSize: "0.9rem" }} className="price">
                 Rs. {nepaliRupeesFormat(product.price)}
               </span>
             )}
           </Typography>
           <Typography level="body-sm">
-            (Only <b>{product.countInStock}</b> left in stock!)
+            
+            {product.countInStock > 0 ? <>(Only <b>{product.countInStock}</b> left in stock!)</> : <b style={{color: "grey"}}>Out of Stock</b>  }
           </Typography>
         </CardContent>
         <CardOverflow>
-          <ButtonGroup
+          <Button
+            variant="solid"
             color="success"
-            sx={{
-              "--ButtonGroup-radius": "40px",
-              justifyContent: "center",
-            }}
+            disabled={product.countInStock <= 0}
+            className="ml-5"
           >
-            <Tooltip arrow title="Add to Cart">
-              <Button
-                variant="outlined"
-                color="danger"
-                disabled={product.countInStock <= 0}
-                onClick={() => addToCartHandler({ ...product, qty: 1 })}
-              >
-                <AddShoppingCartIcon style={{ fontSize: "1.4rem" }} />
-              </Button>
-            </Tooltip>
-            <Divider />
-            <Button
-              variant="solid"
-              color="success"
-              disabled={product.countInStock <= 0}
-              className="ml-5"
-            >
-              <BoltIcon />
-              Buy Now
-            </Button>
-            <Divider />
-            <Tooltip arrow title="Quick View">
-              <Button
-                variant="outlined"
-                color="neutral"
-                onClick={handleShowQuickView}
-              >
-                <VisibilityIcon style={{ fontSize: "1.4rem" }} />
-              </Button>
-            </Tooltip>
-          </ButtonGroup>
+            <BoltIcon />
+            Buy Now
+          </Button>
         </CardOverflow>
       </Card>
+      {/*
       <Modal
         show={showQuickView}
         onHide={handleCloseQuickView}
@@ -172,6 +154,7 @@ function Product({ product }) {
           </Row>
         </Modal.Body>
       </Modal>
+       */}
     </>
   );
 }

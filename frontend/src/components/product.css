@@ -1,40 +1,50 @@
-.title{
-    text-overflow:ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    color: rgb(64, 64, 64);
-    display: block;
-    font-family:'Segoe UI', Geneva, Verdana, sans-serif;
-    margin-bottom: -12px;
-    margin-top: -5px;
+.title {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  color: rgb(64, 64, 64);
+  display: block;
+  font-family: "Segoe UI", Geneva, Verdana, sans-serif;
+  margin-bottom: -12px;
+  margin-top: -5px;
 }
-.product-card{
-    box-shadow: 0 .5rem 1.2rem rgba(0,0,0,.2);
-    transition: all 0.3s ease;
+.product-card {
+  box-shadow: 0 0.5rem 1.2rem rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
-.product-card:hover{
-    transform: translateY(-10px);
-    box-shadow: 0 .5rem 1.2rem rgba(0,0,0,.6);
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0.5rem 1.2rem rgba(0, 0, 0, 0.6);
 }
-.pFooter{
+.pFooter {
   margin-bottom: -20px;
   margin-top: -15px;
 }
-.price{
-    color: rgb(122, 0, 0);
+.price {
+  color: rgb(122, 0, 0);
 }
 
-.discount{
+.discount {
   color: rgb(0, 151, 20);
 }
 
+.modalText {
+  font-size: 1.1rem;
+}
 
-  .modalText{
-    font-size: 1.1rem;
-  }
+.product-description {
+  font-style: italic;
+  font-weight: 500;
+}
 
-  .product-description{
-    font-style: italic;
-    font-weight: 500;
-  }
-          
+/*
+  <Tooltip arrow title="Quick View">
+              <Button
+                variant="outlined"
+                color="neutral"
+                onClick={handleShowQuickView}
+              >
+                <VisibilityIcon style={{ fontSize: "1.4rem" }} />
+              </Button>
+            </Tooltip>
+  */

@@ -3,7 +3,6 @@ import { Col, ListGroup, Modal, Row } from "react-bootstrap";
 import Rating from "./Rating";
 import "./product.css";
 import { Link } from "react-router-dom";
-import { IoEyeSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../slices/cartSlice";
 import { toast } from "react-toastify";
@@ -15,11 +14,13 @@ import {
   Card,
   CardContent,
   CardOverflow,
+  Tooltip,
   Typography,
 } from "@mui/joy";
 import { nepaliRupeesFormat } from "../utils/rupeesUtils";
 import BoltIcon from "@mui/icons-material/Bolt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import Divider from "@mui/joy/Divider";
 
 function Product({ product }) {
   const dispatch = useDispatch();
@@ -41,26 +42,32 @@ function Product({ product }) {
   };
   return (
     <>
-      <Card className="my-2 product-card" sx={{ width: 300, maxWidth: "100%" }}>
+      <Card className="my-2 product-card" sx={{ width: 350, maxWidth: "100%" }}>
         <CardOverflow>
           <Link to={`/product/${product._id}`} className="nav-link">
-            <AspectRatio sx={{ minWidth: 150 }}>
+            <AspectRatio sx={{ minWidth: 150 }} objectFit="contain">
               <img src={product.image} />
             </AspectRatio>
           </Link>
         </CardOverflow>
         <CardContent>
-        <Typography level="body-xs"><b>By</b> {product.brand} | {product.category}</Typography>
-          <Typography level="body-xs"></Typography>
+          <Typography level="body-xs">
+            From <b>{product.brand}</b> | {product.category}
+          </Typography>
+          <Typography level="body-xs" className="pName"></Typography>
           <Link to={`/product/${product._id}`} className="nav-link">
             <Typography level="body-md">
               <b className="title">{product.name}</b>
             </Typography>
           </Link>
-          <Typography level="title-lg" sx={{ mt: 1, fontWeight: "xl" }}>
+          <Typography
+            level="title-lg"
+            sx={{ mt: 1, fontWeight: "xl" }}
+            className="price"
+          >
             {product.discount > 0 ? (
               <>
-                <s style={{ fontSize: "0.8rem" }}>
+                <s style={{ fontSize: "0.8rem" }} className="price">
                   Rs.{nepaliRupeesFormat(product.price)}
                 </s>{" "}
                 <span className="discount" style={{ fontSize: "1rem" }}>
@@ -68,41 +75,54 @@ function Product({ product }) {
                 </span>
               </>
             ) : (
-              <>Rs. {nepaliRupeesFormat(product.price)}</>
+              <span className="price">
+                Rs. {nepaliRupeesFormat(product.price)}
+              </span>
             )}
           </Typography>
-          <CardOverflow>
-            <Typography level="body-sm">
-              (Only <b>{product.countInStock}</b> left in stock!){" "}
+          <Typography level="body-sm">
+            (Only <b>{product.countInStock}</b> left in stock!)
+          </Typography>
+        </CardContent>
+        <CardOverflow>
+          <ButtonGroup
+            color="success"
+            sx={{
+              "--ButtonGroup-radius": "40px",
+              justifyContent: "center",
+            }}
+          >
+            <Tooltip arrow title="Add to Cart">
               <Button
-                variant="plain"
+                variant="outlined"
                 color="danger"
-                title="Add to Cart"
                 disabled={product.countInStock <= 0}
                 onClick={() => addToCartHandler({ ...product, qty: 1 })}
               >
                 <AddShoppingCartIcon style={{ fontSize: "1.4rem" }} />
               </Button>
+            </Tooltip>
+            <Divider />
+            <Button
+              variant="solid"
+              color="success"
+              disabled={product.countInStock <= 0}
+              className="ml-5"
+            >
+              <BoltIcon />
+              Buy Now
+            </Button>
+            <Divider />
+            <Tooltip arrow title="Quick View">
               <Button
-                variant="plain"
+                variant="outlined"
                 color="neutral"
-                title="Quick View"
                 onClick={handleShowQuickView}
               >
                 <VisibilityIcon style={{ fontSize: "1.4rem" }} />
               </Button>
-            </Typography>
-          </CardOverflow>
-        </CardContent>
-        <CardOverflow>
-          <Button
-            color="success"
-            variant="solid"
-            disabled={product.countInStock <= 0}
-          >
-            <BoltIcon />
-            Buy Now
-          </Button>
+            </Tooltip>
+          </ButtonGroup>
         </CardOverflow>
       </Card>
       <Modal

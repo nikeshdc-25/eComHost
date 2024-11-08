@@ -22,7 +22,6 @@ const CartPage = () => {
   const removeCartItem = (id) => {
     dispatch(removeItem(id));
   };
-
   const [promo, setPromo] = useState("");
   const [discount, setDiscount] = useState(0);
   const promoHandler = (e) => {
@@ -51,7 +50,7 @@ const CartPage = () => {
                     <Col md={2}>
                       <Image src={item.image} fluid rounded alt="item image" />
                     </Col>
-                    <Col md={3}>
+                    <Col md={4}>
                       <Link
                         to={`/product/${item._id}`}
                         className="nav-link mb-4"
@@ -63,16 +62,17 @@ const CartPage = () => {
                         {item.discount > 0 ? (
                           <>
                             Rs.<s>{nepaliRupeesFormat(item.qty * item.price)}</s>
-                            <span>
+                            <b>
                               {" "}
                               {nepaliRupeesFormat(item.qty * item.discountedPrice)}
-                            </span>
+                            </b>
                           </>
                         ) : (
-                          <span>{nepaliRupeesFormat(item.qty * item.price)}</span>
+                          <span>Rs.{nepaliRupeesFormat(item.qty * item.price)}</span>
                         )}
                       </span>
                     </Col>
+                    <Col></Col>
                     <Col md={2}>
                       <Form.Control
                         as="select"

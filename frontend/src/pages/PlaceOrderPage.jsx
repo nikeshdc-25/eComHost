@@ -5,10 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAddOrderMutation } from "../slices/orderSlice";
 import { toast } from "react-toastify";
 import { removeCart } from "../slices/cartSlice";
+import { nepaliRupeesFormat } from "../utils/rupeesUtils";
+
 
 function PlaceOrderPage() {
-  const { cartItems, shippingAddress, itemPrice, totalPrice, shippingCharge } =
+  const { cartItems, itemPrice, totalPrice, shippingCharge } =
     useSelector((state) => state.cart);
+    const {shippingAddress} = useSelector((state) => state.shippingAddress)
   const [addOrder, { isLoading }] = useAddOrderMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -66,8 +69,8 @@ function PlaceOrderPage() {
                   </Col>
                   <Col>
                     <strong>
-                      {item.qty} X ${item.price} = $
-                      {(item.qty * item.price).toFixed(2)}
+                      {item.qty} X Rs.{nepaliRupeesFormat(item.discountedPrice)} = Rs.
+                      {nepaliRupeesFormat(item.qty * item.discountedPrice)}
                     </strong>
                   </Col>
                 </Row>
@@ -85,17 +88,17 @@ function PlaceOrderPage() {
             <ListGroup.Item>
               <Row>
                 <Col>Items</Col>
-                <Col>${itemPrice}</Col>
+                <Col>Rs. {nepaliRupeesFormat(itemPrice)}</Col>
               </Row>
               <Row>
                 <Col>Shipping</Col>
-                <Col>${shippingCharge}</Col>
+                <Col>Rs. {shippingCharge}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
                 <Col>Total</Col>
-                <Col>${totalPrice}</Col>
+                <Col>Rs. {nepaliRupeesFormat(totalPrice)}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>

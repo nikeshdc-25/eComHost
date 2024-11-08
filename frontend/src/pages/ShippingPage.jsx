@@ -2,13 +2,13 @@ import { useState } from "react";
 import FormContainer from "../components/FormContainer";
 import { Form, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { saveShippingAddress } from "../slices/cartSlice";
+import { saveShippingAddress } from "../slices/shippingAddressSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const ShippingPage = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  const { shippingAddress } = useSelector((state) => state.cart);
+  const { shippingAddress } = useSelector((state) => state.shippingAddress);
   const [recipient, setRecipient] = useState(userInfo.name);
   const [address, setAddress] = useState(shippingAddress.address || "");
   const [city, setCity] = useState(shippingAddress.city || "");

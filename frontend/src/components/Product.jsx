@@ -21,6 +21,7 @@ function Product({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const { userInfo } = useSelector((state) => state.auth);
   /*
   For View icon [in future]
   const [showQuickView, setShowQuickView] = useState(false);
@@ -40,14 +41,14 @@ function Product({ product }) {
   };
 
   const buyNowHandler = (item) => {
-    const itemExists = cartItems.some((cartItem) => cartItem._id === item._id);
-    if (itemExists) {
-      navigate("/cart")
+    if (!userInfo) {
+      navigate("../login?redirect=/shipping");
     } else {
       dispatch(addItem(item));
-      navigate("/cart")
+      navigate("/cart");
     }
-  }
+  };
+  
   return (
     <>
       <Card className="my-2 product-card" sx={{ flex: '1 1 calc(50% - 1rem)', minWidth: 150, maxWidth: '100%' }}>

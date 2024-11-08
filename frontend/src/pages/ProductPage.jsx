@@ -30,7 +30,6 @@ function ProductPage() {
   const [addReview, { isLoading: reviewLoading }] = useAddReviewMutation();
   const { userInfo } = useSelector((state) => state.auth);
   const [reviews, setReviews] = useState([]);
-  const cartItems = useSelector((state) => state.cart.cartItems);
 
 
   useEffect(() => {
@@ -48,20 +47,15 @@ function ProductPage() {
         comment,
       }).unwrap();
       toast.success(resp.message);
-      setReviews([...reviews, { name: userInfo.name, rating, comment }]); // Update local reviews
+      setReviews([...reviews, { name: userInfo.name, rating, comment }]); 
     } catch (err) {
       toast.error(err.data.error);
     }
   };
 
   const addToCartHandler = (item) => {
-    const itemExists = cartItems.some((cartItem) => cartItem._id === item._id);
-    if (itemExists) {
-      toast.error(`Product is already in your cart.`);
-    } else {
       dispatch(addItem(item));
       toast.success(`Added ${item.name} to your cart.`);
-    };
   };
   const buyNowHandler = (item) => {
       dispatch(addItem(item));

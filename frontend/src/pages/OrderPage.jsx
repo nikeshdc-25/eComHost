@@ -81,8 +81,8 @@ function OrderPage() {
                   </Col>
                   <Col>
                     <strong>
-                      {item.qty} X ${item.price} = $
-                      {(item.qty * item.price).toFixed(2)}
+                      {item.qty} X ${item.discountedPrice} = $
+                      {(item.qty * item.discountedPrice).toFixed(2)}
                     </strong>
                   </Col>
                 </Row>

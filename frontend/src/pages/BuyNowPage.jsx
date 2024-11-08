@@ -4,16 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { useAddOrderMutation } from "../slices/orderSlice";
 import { toast } from "react-toastify";
+import { nepaliRupeesFormat } from "../utils/rupeesUtils";
+
 
 function BuyNowPage() {
-  const { productDetails } = useSelector((state) => state.buynow);
-  const { shippingAddress } = useSelector(
-    (state) => state.shippingAddress
-  );
+  const { productDetails, itemPrice, shippingCharge, totalPrice } =
+    useSelector((state) => state.buynow);
+    const {shippingAddress} = useSelector((state) => state.shippingAddress)
   const [addOrder, { isLoading }] = useAddOrderMutation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const placeOrderHandler = async () => {
     try {
       let res = await addOrder({
@@ -23,65 +22,60 @@ function BuyNowPage() {
             qty,
           },
         ],
+        shippingAddress,
         itemPrice,
         shippingCharge,
-        shippingAddress,
         totalPrice,
       }).unwrap();
       toast.success(res.message);
-      dispatch(removeCart());
       navigate("/order/" + res.orderId);
     } catch (err) {
       toast.error(err.data.error);
     }
   };
-
   return (
     <Row>
       <Col md={8}>
         <ListGroup variant="flush">
           <ListGroup.Item>
-            <h1>Shipping</h1>
-            <hr />
-            <h3>User Details:</h3>
-            {shippingAddress ? (
-              <p>
-                <strong>Name: </strong>
-                {shippingAddress.recipient} <br />
-                <strong>Phone 1: </strong>
-                {shippingAddress.primaryPhone} <br />
-                {shippingAddress.secondaryPhone && (
-                  <>
-                    <strong>Phone 2: </strong>
-                    {shippingAddress.secondaryPhone} <br />
-                  </>
-                )}
-                <strong>Address: </strong>
-                {shippingAddress.address} <br />
-                <strong>City: </strong>
-                {shippingAddress.city} <br />
-              </p>
-            ) : (
-              <p>No shipping address available.</p>
-            )}
+            <h1>Shipping</h1><hr></hr>
+            <br /> <h3>User Details:</h3>
+            <p>
+              <strong>Name: </strong>
+              {shippingAddress.recipient} <br />
+              <strong>Phone {shippingAddress.secondaryPhone && 1}: </strong>
+              {shippingAddress.primaryPhone} <br />
+              {shippingAddress.secondaryPhone && (
+                <>
+                <strong>Phone 2: </strong>
+                {shippingAddress.secondaryPhone} <br />
+                </>
+              )}
+              <strong>Address: </strong>
+              {shippingAddress.address} <br />
+              <strong>City: </strong>
+              {shippingAddress.city} <br />
+            </p>
           </ListGroup.Item>
           <ListGroup.Item>
-            <Row>
-              <Col md={2}>
-                <Image src={productDetails.image} fluid rounded />
-              </Col>
-              <Col>
-                <Link to={`/product/${productDetails._id}`} className="nav-link">
-                  <strong>{productDetails.name}</strong>
-                </Link>
-              </Col>
-              <Col>
-                <strong>
-                  {productDetails.qty} X Rs.{productDetails.discountedPrice} = Rs.
-                  {(productDetails.qty * (productDetails.discountedPrice))}
-                </strong>
-              </Col>
-            </Row>
+              <ListGroup.Item>
+                <Row>
+                  <Col md={2}>
+                    <Image src={productDetails.image} fluid rounded />
+                  </Col>
+                  <Col>
+                    <Link to={`/product/${productDetails._id}`} className="nav-link">
+                      <strong>{productDetails.name}</strong>
+                    </Link>
+                  </Col>
+                  <Col>
+                    <strong>
+                      {productDetails.qty} X Rs.{nepaliRupeesFormat(productDetails.discountedPrice)} = Rs.
+                      {nepaliRupeesFormat(productDetails.qty * productDetails.discountedPrice)}
+                    </strong>
+                  </Col>
+                </Row>
+              </ListGroup.Item>
           </ListGroup.Item>
         </ListGroup>
       </Col>
@@ -93,18 +87,26 @@ function BuyNowPage() {
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Items</Col>
-                <Col>${discountedPrice}</Col>
+                <Col><b>Price:</b></Col>
+                <Col>Rs. {nepaliRupeesFormat(itemPrice)}</Col>
               </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
               <Row>
-                <Col>Shipping</Col>
-                <Col>${shippingCharge}</Col>
+                <Col><b>Shipping Fee:</b></Col>
+                <Col>
+                    {!shippingCharge > 0 ? (
+                      <em>*Free Shipping</em>
+                    ) : (
+                      `Rs. ${shippingCharge}`
+                    )}
+                  </Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Total</Col>
-                <Col>${totalPrice}</Col>
+                <Col><b>Total:</b></Col>
+                <Col>Rs. {nepaliRupeesFormat(totalPrice)}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>

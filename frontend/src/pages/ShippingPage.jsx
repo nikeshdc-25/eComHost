@@ -3,7 +3,7 @@ import FormContainer from "../components/FormContainer";
 import { Form, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { saveShippingAddress } from "../slices/shippingAddressSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const ShippingPage = () => {
@@ -17,6 +17,8 @@ const ShippingPage = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const source = location.state?.source;
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -27,7 +29,14 @@ const ShippingPage = () => {
       return;
     }
     dispatch(saveShippingAddress({ recipient, address, city, primaryPhone, secondaryPhone }));
-    navigate("/placeorder");
+    if (source === "CartPage") {
+      navigate("/placeorder");
+    } else if (source === "BuyNowPage") {
+      navigate("/buynow");
+    }
+    else {
+      toast.error("Invalid source detected.");
+    }
   };
 
   return (
@@ -41,6 +50,7 @@ const ShippingPage = () => {
             placeholder="Enter recipient"
             value={recipient}
             onChange={(e) => setRecipient(e.target.value)}
+            readOnly
           />
         </Form.Group>
         <Form.Group controlId="primaryPhone" className="my-2">
@@ -50,6 +60,7 @@ const ShippingPage = () => {
             placeholder="Enter Contact"
             value={primaryPhone}
             onChange={(e) => setPrimaryPhone(e.target.value)}
+            readOnly
           />
         </Form.Group>
         <Form.Group controlId="secondaryPhone" className="my-2">
@@ -82,7 +93,7 @@ const ShippingPage = () => {
           />
         </Form.Group>
         <Button type="submit" variant="dark" className="my-2">
-          Continue
+          Proceed to Payment
         </Button>
       </Form>
     </FormContainer>

@@ -57,8 +57,16 @@ function ProductPage() {
     dispatch(addItem(item));
     toast.success(`Added ${item.name} to your cart.`);
   };
+  
   const buyNowHandler = (item) => {
     dispatch(saveProductDetails(item));
+    if (!userInfo) {
+      navigate("/login", {
+        state: { redirect: "/shipping", source: "BuyNowPage" },
+      });
+    } else {
+      navigate("/shipping", { state: { source: "BuyNowPage" } });
+    }
   };
   return (
     <>
@@ -175,7 +183,6 @@ function ProductPage() {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <ButtonGroup
-                    color="success"
                     sx={{
                       "--ButtonGroup-radius": "40px",
                       justifyContent: "center",
@@ -189,7 +196,7 @@ function ProductPage() {
                         addToCartHandler({ ...product, qty: Number(qty) })
                       }
                     >
-                      <AddShoppingCartIcon style={{ fontSize: "1.4rem" }} /> Add
+                      <AddShoppingCartIcon style={{ fontSize: "1.2rem" }} /> Add
                       to Cart
                     </Button>
                     <Divider />
@@ -202,7 +209,7 @@ function ProductPage() {
                         buyNowHandler({ ...product, qty: Number(qty) })
                       }
                     >
-                      <BoltIcon />
+                      <BoltIcon style={{ fontSize: "1.2rem" }} />
                       Buy Now
                     </Button>
                   </ButtonGroup>

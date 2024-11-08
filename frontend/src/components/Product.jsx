@@ -42,30 +42,36 @@ function Product({ product }) {
   };
 
   const buyNowHandler = (item) => {
+    dispatch(saveProductDetails(item));
     if (!userInfo) {
-      navigate("../login?redirect=/shipping");
+      navigate("/login", {
+        state: { redirect: "/shipping", source: "BuyNowPage" },
+      });
     } else {
-      dispatch(saveProductDetails(item));
+      navigate("/shipping", { state: { source: "BuyNowPage" } });
     }
   };
-  
+
   return (
     <>
-      <Card className="my-2 product-card" sx={{ flex: '1 1 calc(50% - 1rem)', minWidth: 150, maxWidth: '100%' }}>
+      <Card
+        className="my-2 product-card"
+        sx={{ flex: "1 1 calc(50% - 1rem)", minWidth: 150, maxWidth: "100%" }}
+      >
         <CardOverflow>
           <AspectRatio ratio={1.3} sx={{ minWidth: 150 }}>
             <Link to={`/product/${product._id}`} className="nav-link">
               <img src={product.image} />
             </Link>
             <Tooltip arrow title="Add to Cart">
-            <Button
-              variant="plain"
-              color="danger"
-              disabled={product.countInStock <= 0}
-              onClick={() => addToCartHandler({ ...product, qty: 1 })}
-            >
-              <AddShoppingCartIcon style={{ fontSize: "1.4rem" }} />
-            </Button>
+              <Button
+                variant="plain"
+                color="danger"
+                disabled={product.countInStock <= 0}
+                onClick={() => addToCartHandler({ ...product, qty: 1 })}
+              >
+                <AddShoppingCartIcon style={{ fontSize: "1.4rem" }} />
+              </Button>
             </Tooltip>
           </AspectRatio>
         </CardOverflow>
@@ -87,11 +93,12 @@ function Product({ product }) {
           >
             {product.discount > 0 ? (
               <>
-                <span style={{ fontSize: "0.9rem" }}>Rs.</span><s style={{ fontSize: "0.8rem" }} className="price">
+                <span style={{ fontSize: "0.9rem" }}>Rs.</span>
+                <s style={{ fontSize: "0.8rem" }} className="price">
                   {nepaliRupeesFormat(product.price)}
                 </s>{" "}
                 <span className="discount" style={{ fontSize: "0.9rem" }}>
-                   {nepaliRupeesFormat(product.discountedPrice)}
+                  {nepaliRupeesFormat(product.discountedPrice)}
                 </span>
               </>
             ) : (
@@ -101,8 +108,13 @@ function Product({ product }) {
             )}
           </Typography>
           <Typography level="body-sm">
-            
-            {product.countInStock > 0 ? <>(Only <b>{product.countInStock}</b> left in stock!)</> : <b style={{color: "grey"}}>Out of Stock</b>  }
+            {product.countInStock > 0 ? (
+              <>
+                (Only <b>{product.countInStock}</b> left in stock!)
+              </>
+            ) : (
+              <b style={{ color: "grey" }}>Out of Stock</b>
+            )}
           </Typography>
         </CardContent>
         <CardOverflow>
@@ -112,7 +124,7 @@ function Product({ product }) {
             disabled={product.countInStock <= 0}
             className="ml-5"
             onClick={() => buyNowHandler({ ...product, qty: 1 })}
-            >
+          >
             <BoltIcon />
             Buy Now
           </Button>

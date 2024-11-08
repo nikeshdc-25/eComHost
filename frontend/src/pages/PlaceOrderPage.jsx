@@ -87,17 +87,25 @@ function PlaceOrderPage() {
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Items</Col>
+                <Col><b>Price:</b></Col>
                 <Col>Rs. {nepaliRupeesFormat(itemPrice)}</Col>
               </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
               <Row>
-                <Col>Shipping</Col>
-                <Col>Rs. {shippingCharge}</Col>
+                <Col><b>Shipping Fee:</b></Col>
+                <Col>
+                    {!shippingCharge > 0 ? (
+                      <em>*Free Shipping</em>
+                    ) : (
+                      `Rs. ${shippingCharge}`
+                    )}
+                  </Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Row>
-                <Col>Total</Col>
+                <Col><b>Total:</b></Col>
                 <Col>Rs. {nepaliRupeesFormat(totalPrice)}</Col>
               </Row>
             </ListGroup.Item>

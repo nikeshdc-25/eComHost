@@ -3,7 +3,7 @@ import { Col, ListGroup, Row, Image, Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem, removeItem } from "../slices/cartSlice";
 import { FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Message from "../components/Message";
 import { toast } from "react-toastify";
 import { TbTruckDelivery } from "react-icons/tb";
@@ -16,6 +16,9 @@ const CartPage = () => {
     (state) => state.cart
   );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const {userInfo} = useSelector((state) => state.auth);
+
   const changeCartQty = (item, qty) => {
     dispatch(addItem({ ...item, qty }));
   };
@@ -33,6 +36,13 @@ const CartPage = () => {
       toast.error("Invalid promo code");
     }
   };
+  const checkoutHandling = () => {
+    if (!userInfo) {
+      navigate("/login", { state: { redirect: "/shipping", source: "CartPage" } });
+    } else {
+      navigate("/shipping", { state: { source: "CartPage" } });
+    }
+  };  
 
   return (
     <>
@@ -176,9 +186,7 @@ const CartPage = () => {
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Link to="../login?redirect=/shipping">
-                  <Button variant="dark">Checkout</Button>
-                </Link>
+                  <Button variant="dark" onClick={checkoutHandling}>Checkout</Button>
               </ListGroup.Item>
             </ListGroup>
           </Col>

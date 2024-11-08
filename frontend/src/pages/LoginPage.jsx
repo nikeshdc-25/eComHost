@@ -19,16 +19,23 @@ const LoginPage = () => {
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const redirect = sp.get("redirect") || "/";
+  const source = sp.get("source") || "";
   const [showPassword, setShowPassword] = useState(false);
 
 const handleClickShowPassword = () => setShowPassword(!showPassword);
 
 
-  useEffect(() => {
-    if (userInfo) {
+useEffect(() => {
+  if (userInfo) {
+    if (source === "CartPage") {
+      navigate("/shipping?source=CartPage");
+    } else if (source === "BuyNowPage") {
+      navigate("/shipping?source=BuyNowPage");
+    } else {
       navigate(redirect);
     }
-  }, [userInfo, redirect, navigate]);
+  }
+}, [userInfo, redirect, source, navigate]);
 
   const submitHandler = async (e) => {
     e.preventDefault();

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { Col, ListGroup, Modal, Row } from "react-bootstrap";
-import Rating from "./Rating";
 import "./product.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../slices/cartSlice";
 import { toast } from "react-toastify";
@@ -21,8 +19,10 @@ import BoltIcon from "@mui/icons-material/Bolt";
 
 function Product({ product }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.cartItems);
   /*
+  For View icon [in future]
   const [showQuickView, setShowQuickView] = useState(false);
 
   const handleShowQuickView = () => setShowQuickView(true);
@@ -38,6 +38,16 @@ function Product({ product }) {
       toast.success(`Added ${item.name} to your cart.`);
     }
   };
+
+  const buyNowHandler = (item) => {
+    const itemExists = cartItems.some((cartItem) => cartItem._id === item._id);
+    if (itemExists) {
+      navigate("/cart")
+    } else {
+      dispatch(addItem(item));
+      navigate("/cart")
+    }
+  }
   return (
     <>
       <Card className="my-2 product-card" sx={{ flex: '1 1 calc(50% - 1rem)', minWidth: 150, maxWidth: '100%' }}>
@@ -100,7 +110,8 @@ function Product({ product }) {
             color="success"
             disabled={product.countInStock <= 0}
             className="ml-5"
-          >
+            onClick={() => buyNowHandler({ ...product, qty: 1 })}
+            >
             <BoltIcon />
             Buy Now
           </Button>

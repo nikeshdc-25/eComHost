@@ -19,7 +19,6 @@ import { Button, ButtonGroup, Divider } from "@mui/joy";
 import BoltIcon from "@mui/icons-material/Bolt";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
-
 function ProductPage() {
   const { id } = useParams();
   const [qty, setQty] = useState(1);
@@ -31,6 +30,8 @@ function ProductPage() {
   const [addReview, { isLoading: reviewLoading }] = useAddReviewMutation();
   const { userInfo } = useSelector((state) => state.auth);
   const [reviews, setReviews] = useState([]);
+  const cartItems = useSelector((state) => state.cart.cartItems);
+
 
   useEffect(() => {
     if (product && product.reviews) {
@@ -54,10 +55,18 @@ function ProductPage() {
   };
 
   const addToCartHandler = (item) => {
-    dispatch(addItem(item));
-    navigate("/cart");
+    const itemExists = cartItems.some((cartItem) => cartItem._id === item._id);
+    if (itemExists) {
+      toast.error(`Product is already in your cart.`);
+    } else {
+      dispatch(addItem(item));
+      toast.success(`Added ${item.name} to your cart.`);
+    };
   };
-
+  const buyNowHandler = (item) => {
+      dispatch(addItem(item));
+      navigate("/cart");
+  };
   return (
     <>
       {isLoading ? (
@@ -73,7 +82,7 @@ function ProductPage() {
                 imageSrc={product.image}
                 alwaysInPlace={true}
                 overlayOpacity={0.5}
-                zoomContainerSize={{ width: '200px', height: '200px' }}
+                zoomContainerSize={{ width: "200px", height: "200px" }}
                 zoomContainerBorder="1px solid #ddd"
                 zoomContainerBoxShadow="0px 4px 8px rgba(0, 122, 18, 0.2)"
               />
@@ -86,36 +95,30 @@ function ProductPage() {
                 <ListGroup.Item>
                   <Row>
                     <Col>
-                    <strong>Brand</strong>
+                      <strong>Brand</strong>
                     </Col>
-                    <Col>
-                    {product.brand}
-                    </Col>
+                    <Col>{product.brand}</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                <Row>
+                  <Row>
                     <Col>
-                    <strong>Category</strong>
+                      <strong>Category</strong>
                     </Col>
-                    <Col>
-                    {product.category}
-                    </Col>
+                    <Col>{product.category}</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                <Row>
+                  <Row>
                     <Col>
-                    <strong>Total Puffs</strong>
+                      <strong>Total Puffs</strong>
                     </Col>
-                    <Col>
-                    N/A
-                    </Col>
+                    <Col>N/A</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Rating value={product.rating} text={product.numReviews} />
-                </ListGroup.Item> 
+                </ListGroup.Item>
                 <ListGroup.Item>
                   <span>{product.description}</span>
                 </ListGroup.Item>
@@ -137,9 +140,13 @@ function ProductPage() {
                     <Col>
                       <strong>
                         {product.countInStock > 0 ? (
-                          <x>In Stock <FaCheckCircle color="green" size={20}/></x>
+                          <x>
+                            In Stock <FaCheckCircle color="green" size={20} />
+                          </x>
                         ) : (
-                          <x>Out of Stock <MdCancel color="red" size={20}/></x>
+                          <x>
+                            Out of Stock <MdCancel color="red" size={20} />
+                          </x>
                         )}
                       </strong>
                     </Col>
@@ -157,32 +164,38 @@ function ProductPage() {
                   </Form.Control>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                <ButtonGroup
-            color="success"
-            sx={{
-              "--ButtonGroup-radius": "40px",
-              justifyContent: "center",
-            }}
-          >
-              <Button
-                variant="outlined"
-                color="danger"
-                disabled={product.countInStock <= 0}
-                onClick={() => addToCartHandler({ ...product, qty: 1 })}
-              >
-                <AddShoppingCartIcon style={{ fontSize: "1.4rem" }} /> Add to Cart
-              </Button>
-            <Divider />
-            <Button
-              variant="solid"
-              color="success"
-              disabled={product.countInStock <= 0}
-              className="ml-5"
-            >
-              <BoltIcon />
-              Buy Now
-            </Button>
-            </ButtonGroup>
+                  <ButtonGroup
+                    color="success"
+                    sx={{
+                      "--ButtonGroup-radius": "40px",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Button
+                      variant="outlined"
+                      color="danger"
+                      disabled={product.countInStock <= 0}
+                      onClick={() =>
+                        addToCartHandler({ ...product, qty: Number(qty) })
+                      }
+                    >
+                      <AddShoppingCartIcon style={{ fontSize: "1.4rem" }} /> Add
+                      to Cart
+                    </Button>
+                    <Divider />
+                    <Button
+                      variant="solid"
+                      color="success"
+                      disabled={product.countInStock <= 0}
+                      className="ml-5"
+                      onClick={() =>
+                        buyNowHandler({ ...product, qty: Number(qty) })
+                      }
+                    >
+                      <BoltIcon />
+                      Buy Now
+                    </Button>
+                  </ButtonGroup>
                 </ListGroup.Item>
               </ListGroup>
             </Col>

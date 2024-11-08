@@ -4,12 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { useAddOrderMutation } from "../slices/orderSlice";
 import { toast } from "react-toastify";
-import { removeCart } from "../slices/cartSlice";
 
 function BuyNowPage() {
   const { productDetails } = useSelector((state) => state.buynow);
   const { shippingAddress } = useSelector(
-    (state) => state.cart
+    (state) => state.shippingAddress
   );
   const [addOrder, { isLoading }] = useAddOrderMutation();
   const navigate = useNavigate();
@@ -21,11 +20,12 @@ function BuyNowPage() {
         orderItems: [
           {
             id: productDetails._id,
-            qty: 1,
+            qty,
           },
         ],
         itemPrice,
         shippingCharge,
+        shippingAddress,
         totalPrice,
       }).unwrap();
       toast.success(res.message);

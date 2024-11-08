@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { updateBuy } from "../utils/buyUtils";
 
 const initialState = localStorage.getItem("buynow")
   ? JSON.parse(localStorage.getItem("buynow"))
@@ -13,6 +14,7 @@ const buySlice = createSlice({
     saveProductDetails: (state, action) => {
       state.productDetails = action.payload;
       localStorage.setItem("buynow", JSON.stringify(state));
+      return updateBuy(state);
     },
   },
 });

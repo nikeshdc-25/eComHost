@@ -3,6 +3,7 @@ import "./product.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../slices/cartSlice";
+import { saveProductDetails } from "../slices/buySlice";
 import { toast } from "react-toastify";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import {
@@ -44,8 +45,7 @@ function Product({ product }) {
     if (!userInfo) {
       navigate("../login?redirect=/shipping");
     } else {
-      dispatch(addItem(item));
-      navigate("/cart");
+      dispatch(saveProductDetails(item));
     }
   };
   

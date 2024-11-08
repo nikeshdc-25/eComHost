@@ -18,6 +18,7 @@ import { nepaliRupeesFormat } from "../utils/rupeesUtils";
 import { Button, ButtonGroup, Divider } from "@mui/joy";
 import BoltIcon from "@mui/icons-material/Bolt";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { saveProductDetails } from "../slices/buySlice";
 
 function ProductPage() {
   const { id } = useParams();
@@ -30,7 +31,6 @@ function ProductPage() {
   const [addReview, { isLoading: reviewLoading }] = useAddReviewMutation();
   const { userInfo } = useSelector((state) => state.auth);
   const [reviews, setReviews] = useState([]);
-
 
   useEffect(() => {
     if (product && product.reviews) {
@@ -47,19 +47,18 @@ function ProductPage() {
         comment,
       }).unwrap();
       toast.success(resp.message);
-      setReviews([...reviews, { name: userInfo.name, rating, comment }]); 
+      setReviews([...reviews, { name: userInfo.name, rating, comment }]);
     } catch (err) {
       toast.error(err.data.error);
     }
   };
 
   const addToCartHandler = (item) => {
-      dispatch(addItem(item));
-      toast.success(`Added ${item.name} to your cart.`);
+    dispatch(addItem(item));
+    toast.success(`Added ${item.name} to your cart.`);
   };
   const buyNowHandler = (item) => {
-      dispatch(addItem(item));
-      navigate("/cart");
+    dispatch(saveProductDetails(item));
   };
   return (
     <>
@@ -124,7 +123,24 @@ function ProductPage() {
                   <Row>
                     <Col>Price</Col>
                     <Col>
-                      <strong>Rs. {nepaliRupeesFormat(product.price)}</strong>
+                      {product.discount > 0 ? (
+                        <>
+                          <span style={{ fontSize: "0.9rem" }}>Rs.</span>
+                          <s style={{ fontSize: "0.8rem" }} className="price">
+                            {nepaliRupeesFormat(product.price)}
+                          </s>{" "}
+                          <b
+                            className="discount"
+                            style={{ fontSize: "0.9rem" }}
+                          >
+                            {nepaliRupeesFormat(product.discountedPrice)}
+                          </b>
+                        </>
+                      ) : (
+                        <span style={{ fontSize: "0.9rem" }} className="price">
+                          Rs. {nepaliRupeesFormat(product.price)}
+                        </span>
+                      )}
                     </Col>
                   </Row>
                 </ListGroup.Item>

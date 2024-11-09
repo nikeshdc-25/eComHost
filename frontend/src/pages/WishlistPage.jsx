@@ -41,17 +41,10 @@ const WishlistPage = () => {
   return (
     <Box sx={{ padding: "20px", color: "black", minHeight: "100vh" }}>
       <h2 className="pb-2">My Wishlist</h2>
-      {error && (
-        <Alert color="danger">
-          Error fetching wishlist. Please try again later.
-        </Alert>
-      )}
-
       {wishlist &&
       wishlist.wishlistItems &&
       wishlist.wishlistItems.length > 0 ? (
         wishlist.wishlistItems.map((item) => (
-          <Link to={`/product/${item.product._id}`} className="nav-link">
           <Card
             key={item.product._id}
             sx={{
@@ -64,16 +57,19 @@ const WishlistPage = () => {
               alignItems: "center", // Align content centrally
             }}
           >
-            <img
-              src={item.image}
-              alt={item.name}
-              style={{
-                width: "150px",
-                height: "auto",
-                borderRadius: "8px",
-                marginRight: "20px",
-              }}
-            />
+            <Link to={`/product/${item.product._id}`} className="nav-link">
+              <img
+                src={item.image}
+                alt={item.name}
+                style={{
+                  width: "150px",
+                  height: "auto",
+                  borderRadius: "8px",
+                  marginRight: "20px",
+                }}
+              />
+            </Link>
+
             <CardContent sx={{ flex: 1 }}>
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                 {item.name}
@@ -85,7 +81,7 @@ const WishlistPage = () => {
                     <s className="price">
                       {nepaliRupeesFormat(item.price)}
                     </s>{" "}
-                    <span className="discount" >
+                    <span className="discount">
                       {nepaliRupeesFormat(item.discountedPrice)}
                     </span>
                   </>
@@ -120,7 +116,6 @@ const WishlistPage = () => {
               </IconButton>
             </Box>
           </Card>
-          </Link>
         ))
       ) : (
         <Typography sx={{ color: "green" }}>

@@ -58,6 +58,12 @@ const productSchema = new mongoose.Schema(
       default: 0,
     },
     reviews: [reviewSchema],
+    properties: [
+      {
+        key: { type: String, required: true },
+        value: { type: mongoose.Schema.Types.Mixed },
+      },
+    ],
   },
   { timestamps: true }
 );

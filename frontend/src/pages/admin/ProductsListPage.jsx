@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   useAddProductMutation,
   useDeleteProductMutation,
   useGetProductsQuery,
 } from "../../slices/productSlice";
-import { Row, Col, Button, Table } from "react-bootstrap";
+import { Row, Col, Button, Table, Form } from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Message from "../../components/Message";
 import { toast } from "react-toastify";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Paginate from "../../components/Paginate";
 import { nepaliRupeesFormat } from "../../utils/rupeesUtils";
 
@@ -19,9 +19,13 @@ const ProductsListPage = () => {
   const [deleteProduct, { isLoading: deleteLoading }] =
     useDeleteProductMutation();
 
-  const addProductHandler = async () => {
+  // State to hold selected category
+  const [category, setCategory] = useState("Liquid");
+
+  const addProductHandler = async (e) => {
+    e.preventDefault();
     try {
-      let resp = await addProduct().unwrap();
+      let resp = await addProduct({ category }).unwrap();
       toast.success(resp.message);
     } catch (err) {
       toast.error(err.data.error);
@@ -46,6 +50,20 @@ const ProductsListPage = () => {
           <h3>Products</h3>
         </Col>
         <Col className="text-end">
+          {/* Dropdown for selecting category */}
+          <Form.Select
+            aria-label="Select Category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="me-2"
+            style={{ width: "200px" }}
+          >
+            <option value="Liquid">Liquid</option>
+            <option value="Pod">Pod</option>
+            <option value="Mod">Mod</option>
+            <option value="Coil">Coil</option>
+            <option value="Disposable Vape">Disposable Vape</option>
+          </Form.Select>
           <Button size="sm" variant="dark" onClick={addProductHandler}>
             <FaEdit className="mb-1" /> Create Product
           </Button>

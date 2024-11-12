@@ -61,7 +61,10 @@ const productSchema = new mongoose.Schema(
     properties: [
       {
         key: { type: String, required: true },
-        value: { type: mongoose.Schema.Types.Mixed },
+        value: {
+          type: mongoose.Schema.Types.Mixed, // Allows both string and number types
+          required: true,
+        },
       },
     ],
   },

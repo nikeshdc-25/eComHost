@@ -77,7 +77,7 @@ function Product({ product }) {
         setIsInWishlist(true);
         toast.success("Added to Wishlist.");
       }
-      refetch(); // Manually trigger a refetch of the wishlist data after updating it
+      refetch();
     } catch (error) {
       toast.error(error);
     }
@@ -88,44 +88,41 @@ function Product({ product }) {
       className="my-2 product-card"
       sx={{ flex: "1 1 calc(50% - 1rem)", minWidth: 150, maxWidth: "100%" }}
     >
-      <CardOverflow sx={{ position: 'relative' }}>
-  <AspectRatio ratio={1.3} sx={{ minWidth: 150 }}>
-    <Link to={`/product/${product._id}`} className="nav-link">
-      <img src={product.image} alt={product.name} />
-    </Link>
+      <CardOverflow sx={{ position: "relative" }}>
+        <AspectRatio ratio={1} sx={{ minWidth: 150 }}>
+          <Link to={`/product/${product._id}`} className="nav-link">
+            <img src={product.image} alt={product.name} />
+          </Link>
 
-    {/* Button container with relative positioning */}
-    <div style={{ position: 'absolute', top: '10px', left: '10px' }}>
-      <Tooltip arrow title="Add to Cart">
-        <Button
-          variant="plain"
-          color="danger"
-          disabled={product.countInStock <= 0}
-          onClick={() => addToCartHandler({ ...product, qty: 1 })}
-        >
-          <AddShoppingCartIcon style={{ fontSize: "1.4rem" }} />
-        </Button>
-      </Tooltip>
-    </div>
+          <div style={{ position: "absolute", top: "10px", left: "10px" }}>
+            <Tooltip arrow title="Add to Cart">
+              <Button
+                variant="plain"
+                color="danger"
+                disabled={product.countInStock <= 0}
+                onClick={() => addToCartHandler({ ...product, qty: 1 })}
+              >
+                <AddShoppingCartIcon style={{ fontSize: "1.4rem" }} />
+              </Button>
+            </Tooltip>
+          </div>
 
-    {/* Move the bookmark button to the opposite right */}
-    <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
-      <Tooltip
-        arrow
-        title={isInWishlist ? "Remove Wishlist" : "Add Wishlist"}
-      >
-        <Button variant="plain" color="success" onClick={toggleWishlist}>
-          {isInWishlist ? (
-            <BookmarkIcon style={{ fontSize: "1.4rem" }} />
-          ) : (
-            <BookmarkBorderIcon style={{ fontSize: "1.4rem" }} />
-          )}
-        </Button>
-      </Tooltip>
-    </div>
-  </AspectRatio>
-</CardOverflow>
-
+          <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+            <Tooltip
+              arrow
+              title={isInWishlist ? "Remove Wishlist" : "Add Wishlist"}
+            >
+              <Button variant="plain" color="success" onClick={toggleWishlist}>
+                {isInWishlist ? (
+                  <BookmarkIcon style={{ fontSize: "1.4rem" }} />
+                ) : (
+                  <BookmarkBorderIcon style={{ fontSize: "1.4rem" }} />
+                )}
+              </Button>
+            </Tooltip>
+          </div>
+        </AspectRatio>
+      </CardOverflow>
 
       <CardContent>
         <Typography level="body-xs">

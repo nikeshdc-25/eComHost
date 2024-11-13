@@ -23,7 +23,7 @@ function ProductEditPage() {
   const {
     data: product,
     isLoading: productLoading,
-    error,
+    refetch,
   } = useGetProductByIdQuery(id);
   const navigate = useNavigate();
   const [updateProduct, { isLoading: updateLoading }] =
@@ -63,6 +63,8 @@ function ProductEditPage() {
         countInStock,
         properties: validatedProperties,
       }).unwrap();
+      setProperties(validatedProperties);
+      refetch();
       navigate("/admin/products");
       toast.success(resp.message);
     } catch (err) {
@@ -83,10 +85,12 @@ function ProductEditPage() {
   };
 
   const handlePropertyChange = (index, value) => {
-    const updatedProperties = [...properties];
-    updatedProperties[index].value = value;
+    const updatedProperties = properties.map((prop, i) => 
+      i === index ? { ...prop, value } : prop
+    );
     setProperties(updatedProperties);
   };
+  
 
   return (
     <FormContainer>

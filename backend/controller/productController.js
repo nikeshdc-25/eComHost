@@ -68,7 +68,7 @@ const addProduct = asyncHandler(async (req, res) => {
     discount: req.body.discount || 0,
     brand: req.body.brand || "Sample Brand",
     category: req.body.category || "Sample Category",
-    properties: categoryProperties, // Pass the properties array
+    properties: categoryProperties,
   });
 
   res.send({ message: `Product created successfully!`, product });
@@ -157,99 +157,201 @@ const updateProduct = asyncHandler(async (req, res) => {
 
   // Update properties based on category
   if (req.body.category) {
-    let categoryProperties = {};
-    const properties = req.body.properties;
+    let categoryProperties = [];
+    const properties = req.body.properties || [];
+    const propertiesMap = properties.reduce((acc, prop) => {
+      acc[prop.key] = prop.value;
+      return acc;
+    }, {});
+
     switch (req.body.category) {
       case "Liquid":
-        categoryProperties = {
-          nicotine: properties.nicotine || product.properties.nicotine,
-          flavour: properties.flavour || product.properties.flavour,
-        };
+        categoryProperties = [
+          {
+            key: "nicotine",
+            value:
+              propertiesMap.nicotine ||
+              product.properties?.find((p) => p.key === "nicotine")?.value ||
+              "0mg",
+          },
+          {
+            key: "flavour",
+            value:
+              propertiesMap.flavour ||
+              product.properties?.find((p) => p.key === "flavour")?.value ||
+              "Default Flavour",
+          },
+        ];
         break;
       case "Pod":
-        categoryProperties = {
-          tankCapacity:
-            properties.tankCapacity ||
-            product.properties?.tankCapacity ||
-            "0ml",
-          tankType:
-            properties.tankType ||
-            product.properties?.tankType ||
-            "Default Type",
-          coilType:
-            properties.coilType ||
-            product.properties?.coilType ||
-            "Default Coil",
-          wattControl:
-            properties.wattControl || product.properties?.wattControl || false,
-          display:
-            properties.display || product.properties?.display || "No Display",
-          battery:
-            properties.battery ||
-            product.properties?.battery ||
-            "Default Battery",
-          color:
-            properties.color || product.properties?.color || "Default Color",
-        };
+        categoryProperties = [
+          {
+            key: "tankCapacity",
+            value:
+              propertiesMap.tankCapacity ||
+              product.properties?.find((p) => p.key === "tankCapacity")?.value ||
+              "0ml",
+          },
+          {
+            key: "tankType",
+            value:
+              propertiesMap.tankType ||
+              product.properties?.find((p) => p.key === "tankType")?.value ||
+              "Default Type",
+          },
+          {
+            key: "coilType",
+            value:
+              propertiesMap.coilType ||
+              product.properties?.find((p) => p.key === "coilType")?.value ||
+              "Default Coil",
+          },
+          {
+            key: "wattControl",
+            value:
+              propertiesMap.wattControl ||
+              product.properties?.find((p) => p.key === "wattControl")?.value ||
+              false,
+          },
+          {
+            key: "display",
+            value:
+              propertiesMap.display ||
+              product.properties?.find((p) => p.key === "display")?.value ||
+              "No Display",
+          },
+          {
+            key: "battery",
+            value:
+              propertiesMap.battery ||
+              product.properties?.find((p) => p.key === "battery")?.value ||
+              "Default Battery",
+          },
+          {
+            key: "color",
+            value:
+              propertiesMap.color ||
+              product.properties?.find((p) => p.key === "color")?.value ||
+              "Default Color",
+          },
+        ];
         break;
       case "Mod":
-        categoryProperties = {
-          wattage:
-            properties.wattage ||
-            product.properties?.wattage ||
-            "Default Wattage",
-          tankType:
-            properties.tankType ||
-            product.properties?.tankType ||
-            "Default Tank",
-          wattControl:
-            properties.wattControl || product.properties?.wattControl || false,
-          display:
-            properties.display || product.properties?.display || "No Display",
-          battery:
-            properties.battery ||
-            product.properties?.battery ||
-            "Default Battery",
-          color:
-            properties.color || product.properties?.color || "Default Color",
-        };
+        categoryProperties = [
+          {
+            key: "wattage",
+            value:
+              propertiesMap.wattage ||
+              product.properties?.find((p) => p.key === "wattage")?.value ||
+              "Default Wattage",
+          },
+          {
+            key: "tankType",
+            value:
+              propertiesMap.tankType ||
+              product.properties?.find((p) => p.key === "tankType")?.value ||
+              "Default Tank",
+          },
+          {
+            key: "wattControl",
+            value:
+              propertiesMap.wattControl ||
+              product.properties?.find((p) => p.key === "wattControl")?.value ||
+              false,
+          },
+          {
+            key: "display",
+            value:
+              propertiesMap.display ||
+              product.properties?.find((p) => p.key === "display")?.value ||
+              "No Display",
+          },
+          {
+            key: "battery",
+            value:
+              propertiesMap.battery ||
+              product.properties?.find((p) => p.key === "battery")?.value ||
+              "Default Battery",
+          },
+          {
+            key: "color",
+            value:
+              propertiesMap.color ||
+              product.properties?.find((p) => p.key === "color")?.value ||
+              "Default Color",
+          },
+        ];
         break;
       case "Coil":
-        categoryProperties = {
-          coilType:
-            properties.coilType ||
-            product.properties?.coilType ||
-            "Default Coil",
-          resistance:
-            properties.resistance ||
-            product.properties?.resistance ||
-            "Default Resistance",
-          material:
-            properties.material ||
-            product.properties?.material ||
-            "Default Material",
-        };
+        categoryProperties = [
+          {
+            key: "coilType",
+            value:
+              propertiesMap.coilType ||
+              product.properties?.find((p) => p.key === "coilType")?.value ||
+              "Default Coil",
+          },
+          {
+            key: "resistance",
+            value:
+              propertiesMap.resistance ||
+              product.properties?.find((p) => p.key === "resistance")?.value ||
+              "Default Resistance",
+          },
+          {
+            key: "material",
+            value:
+              propertiesMap.material ||
+              product.properties?.find((p) => p.key === "material")?.value ||
+              "Default Material",
+          },
+        ];
         break;
       case "Disposable Vape":
-        categoryProperties = {
-          puffCount: properties.puffCount || product.properties?.puffCount || 0,
-          nicotine:
-            properties.nicotine || product.properties?.nicotine || "0mg",
-          flavour:
-            properties.flavour ||
-            product.properties?.flavour ||
-            "Default Flavour",
-          coilType:
-            properties.coilType ||
-            product.properties?.coilType ||
-            "Default Coil",
-          battery:
-            properties.battery ||
-            product.properties?.battery ||
-            "Default Battery",
-          rechargable:
-            properties.rechargable || product.properties?.rechargable || false,
-        };
+        categoryProperties = [
+          {
+            key: "puffCount",
+            value:
+              propertiesMap.puffCount ||
+              product.properties?.find((p) => p.key === "puffCount")?.value ||
+              0,
+          },
+          {
+            key: "nicotine",
+            value:
+              propertiesMap.nicotine ||
+              product.properties?.find((p) => p.key === "nicotine")?.value ||
+              "0mg",
+          },
+          {
+            key: "flavour",
+            value:
+              propertiesMap.flavour ||
+              product.properties?.find((p) => p.key === "flavour")?.value ||
+              "Default Flavour",
+          },
+          {
+            key: "coilType",
+            value:
+              propertiesMap.coilType ||
+              product.properties?.find((p) => p.key === "coilType")?.value ||
+              "Default Coil",
+          },
+          {
+            key: "battery",
+            value:
+              propertiesMap.battery ||
+              product.properties?.find((p) => p.key === "battery")?.value ||
+              "Default Battery",
+          },
+          {
+            key: "rechargable",
+            value:
+              propertiesMap.rechargable ||
+              product.properties?.find((p) => p.key === "rechargable")?.value ||
+              "false",
+          },
+        ];
         break;
       default:
         break;

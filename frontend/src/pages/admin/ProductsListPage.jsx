@@ -8,7 +8,7 @@ import { Row, Col, Button, Table, Form } from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Message from "../../components/Message";
 import { toast } from "react-toastify";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Paginate from "../../components/Paginate";
 import { nepaliRupeesFormat } from "../../utils/rupeesUtils";
 
@@ -19,8 +19,7 @@ const ProductsListPage = () => {
   const [deleteProduct, { isLoading: deleteLoading }] =
     useDeleteProductMutation();
 
-  // State to hold selected category
-  const [category, setCategory] = useState("Liquid");
+  const [category, setCategory] = useState(0);
 
   const addProductHandler = async (e) => {
     e.preventDefault();
@@ -50,7 +49,6 @@ const ProductsListPage = () => {
           <h3>Products</h3>
         </Col>
         <Col className="text-end">
-          {/* Dropdown for selecting category */}
           <Form.Select
             aria-label="Select Category"
             value={category}
@@ -58,13 +56,20 @@ const ProductsListPage = () => {
             className="me-2"
             style={{ width: "200px" }}
           >
+            <option value="">Select Category</option>{" "}
             <option value="Liquid">Liquid</option>
             <option value="Pod">Pod</option>
             <option value="Mod">Mod</option>
             <option value="Coil">Coil</option>
             <option value="Disposable Vape">Disposable Vape</option>
           </Form.Select>
-          <Button size="sm" variant="dark" onClick={addProductHandler}>
+          {/* Create Product Button */}
+          <Button
+            size="sm"
+            variant="dark"
+            onClick={addProductHandler}
+            disabled={!category}
+          >
             <FaEdit className="mb-1" /> Create Product
           </Button>
         </Col>

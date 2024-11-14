@@ -62,11 +62,14 @@ const productSchema = new mongoose.Schema(
       {
         key: { type: String, required: true },
         value: {
-          type: mongoose.Schema.Types.Mixed, // Allows both string and number types
+          type: mongoose.Schema.Types.Mixed,
           required: true,
         },
       },
     ],
+    nicotine: [String],
+    flavour: [String],
+    color: [String],
   },
   { timestamps: true }
 );

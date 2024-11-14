@@ -10,12 +10,6 @@ const addProduct = asyncHandler(async (req, res) => {
 
   let categoryProperties = [];
   switch (category) {
-    case "Liquid":
-      categoryProperties = [
-        { key: "nicotine", value: "0mg" },
-        { key: "flavour", value: "Default Flavour" },
-      ];
-      break;
     case "Pod":
       categoryProperties = [
         { key: "tankCapacity", value: "0ml" },
@@ -24,7 +18,6 @@ const addProduct = asyncHandler(async (req, res) => {
         { key: "wattControl", value: false },
         { key: "display", value: "No Display" },
         { key: "battery", value: "Default Battery" },
-        { key: "color", value: "Default Color" },
       ];
       break;
     case "Mod":
@@ -34,7 +27,6 @@ const addProduct = asyncHandler(async (req, res) => {
         { key: "wattControl", value: false },
         { key: "display", value: "No Display" },
         { key: "battery", value: "Default Battery" },
-        { key: "color", value: "Default Color" },
       ];
       break;
     case "Coil":
@@ -47,8 +39,6 @@ const addProduct = asyncHandler(async (req, res) => {
     case "Disposable Vape":
       categoryProperties = [
         { key: "puffCount", value: 0 },
-        { key: "nicotine", value: "0mg" },
-        { key: "flavour", value: "Default Flavour" },
         { key: "coilType", value: "Default Coil" },
         { key: "battery", value: "Default Battery" },
         { key: "rechargable", value: false },
@@ -68,6 +58,9 @@ const addProduct = asyncHandler(async (req, res) => {
     discount: req.body.discount || 0,
     brand: req.body.brand || "Sample Brand",
     category: req.body.category || "Sample Category",
+    nicotine: req.body.nicotine || [],
+    flavour: req.body.flavour || [],
+    color: req.body.color || [],
     properties: categoryProperties,
   });
 
@@ -154,8 +147,11 @@ const updateProduct = asyncHandler(async (req, res) => {
   product.price = req.body.price || product.price;
   product.discount = req.body.discount || product.discount;
   product.countInStock = req.body.countInStock || product.countInStock;
+  product.nicotine = req.body.nicotine || [];
+  product.flavour = req.body.flavour || [];
+  product.color = req.body.color || [];
 
-  // Update properties based on category
+
   if (req.body.category) {
     let categoryProperties = [];
     const properties = req.body.properties || [];
@@ -165,31 +161,14 @@ const updateProduct = asyncHandler(async (req, res) => {
     }, {});
 
     switch (req.body.category) {
-      case "Liquid":
-        categoryProperties = [
-          {
-            key: "nicotine",
-            value:
-              propertiesMap.nicotine ||
-              product.properties?.find((p) => p.key === "nicotine")?.value ||
-              "0mg",
-          },
-          {
-            key: "flavour",
-            value:
-              propertiesMap.flavour ||
-              product.properties?.find((p) => p.key === "flavour")?.value ||
-              "Default Flavour",
-          },
-        ];
-        break;
       case "Pod":
         categoryProperties = [
           {
             key: "tankCapacity",
             value:
               propertiesMap.tankCapacity ||
-              product.properties?.find((p) => p.key === "tankCapacity")?.value ||
+              product.properties?.find((p) => p.key === "tankCapacity")
+                ?.value ||
               "0ml",
           },
           {
@@ -226,13 +205,6 @@ const updateProduct = asyncHandler(async (req, res) => {
               propertiesMap.battery ||
               product.properties?.find((p) => p.key === "battery")?.value ||
               "Default Battery",
-          },
-          {
-            key: "color",
-            value:
-              propertiesMap.color ||
-              product.properties?.find((p) => p.key === "color")?.value ||
-              "Default Color",
           },
         ];
         break;
@@ -273,13 +245,6 @@ const updateProduct = asyncHandler(async (req, res) => {
               product.properties?.find((p) => p.key === "battery")?.value ||
               "Default Battery",
           },
-          {
-            key: "color",
-            value:
-              propertiesMap.color ||
-              product.properties?.find((p) => p.key === "color")?.value ||
-              "Default Color",
-          },
         ];
         break;
       case "Coil":
@@ -316,20 +281,7 @@ const updateProduct = asyncHandler(async (req, res) => {
               product.properties?.find((p) => p.key === "puffCount")?.value ||
               0,
           },
-          {
-            key: "nicotine",
-            value:
-              propertiesMap.nicotine ||
-              product.properties?.find((p) => p.key === "nicotine")?.value ||
-              "0mg",
-          },
-          {
-            key: "flavour",
-            value:
-              propertiesMap.flavour ||
-              product.properties?.find((p) => p.key === "flavour")?.value ||
-              "Default Flavour",
-          },
+
           {
             key: "coilType",
             value:

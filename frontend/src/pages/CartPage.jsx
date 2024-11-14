@@ -5,11 +5,9 @@ import { addItem, removeItem } from "../slices/cartSlice";
 import { FaTrash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import Message from "../components/Message";
-import { toast } from "react-toastify";
 import { TbTruckDelivery } from "react-icons/tb";
 import "./CartPage.css";
 import { nepaliRupeesFormat } from "../utils/rupeesUtils";
- 
 
 const CartPage = () => {
   const { cartItems, shippingCharge, totalPrice, itemPrice } = useSelector(
@@ -17,7 +15,7 @@ const CartPage = () => {
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {userInfo} = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
 
   const changeCartQty = (item, qty) => {
     dispatch(addItem({ ...item, qty }));
@@ -25,24 +23,15 @@ const CartPage = () => {
   const removeCartItem = (id) => {
     dispatch(removeItem(id));
   };
-  const [promo, setPromo] = useState("");
-  const [discount, setDiscount] = useState(0);
-  const promoHandler = (e) => {
-    if (promo === "123456") {
-      setDiscount(5);
-      toast.success("Promo Applied!");
-    } else {
-      setDiscount(0);
-      toast.error("Invalid promo code");
-    }
-  };
   const checkoutHandling = () => {
     if (!userInfo) {
-      navigate("/login", { state: { redirect: "/shipping", source: "CartPage" } });
+      navigate("/login", {
+        state: { redirect: "/shipping", source: "CartPage" },
+      });
     } else {
       navigate("/shipping", { state: { source: "CartPage" } });
     }
-  };  
+  };
 
   return (
     <>
@@ -71,14 +60,19 @@ const CartPage = () => {
                       <span>
                         {item.discount > 0 ? (
                           <>
-                            Rs.<s>{nepaliRupeesFormat(item.qty * item.price)}</s>
+                            Rs.
+                            <s>{nepaliRupeesFormat(item.qty * item.price)}</s>
                             <b>
                               {" "}
-                              {nepaliRupeesFormat(item.qty * item.discountedPrice)}
+                              {nepaliRupeesFormat(
+                                item.qty * item.discountedPrice
+                              )}
                             </b>
                           </>
                         ) : (
-                          <span>Rs.{nepaliRupeesFormat(item.qty * item.price)}</span>
+                          <span>
+                            Rs.{nepaliRupeesFormat(item.qty * item.price)}
+                          </span>
                         )}
                       </span>
                     </Col>
@@ -124,18 +118,7 @@ const CartPage = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Net Total</Col>
-                  <Col>
-                    {discount === 5 ? (
-                      <>
-                        Rs.<s>{nepaliRupeesFormat(itemPrice)}</s>
-                        <b style={{ color: "green" }}>
-                          {nepaliRupeesFormat(itemPrice - discount)}
-                        </b>
-                      </>
-                    ) : (
-                      `Rs.${nepaliRupeesFormat(itemPrice)}`
-                    )}
-                  </Col>
+                  <Col>Rs. {nepaliRupeesFormat(itemPrice)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
@@ -156,37 +139,16 @@ const CartPage = () => {
                     <strong>Total</strong>
                   </Col>
                   <Col>
-                    <strong>Rs. {nepaliRupeesFormat(totalPrice - discount)}</strong>
+                    <strong>
+                      Rs. {nepaliRupeesFormat(totalPrice)}
+                    </strong>
                   </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Row>
-                  <Col>Promo:</Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <input
-                      type="text"
-                      placeholder="Enter Promo code..."
-                      maxLength="6"
-                      value={promo}
-                      onChange={(e) => setPromo(e.target.value)}
-                    ></input>
-                  </Col>
-                  <Col>
-                    <Button
-                      variant="success"
-                      onClick={promoHandler}
-                      disabled={discount == 5}
-                    >
-                      Apply
-                    </Button>
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                  <Button variant="dark" onClick={checkoutHandling}>Checkout</Button>
+                <Button variant="dark" onClick={checkoutHandling}>
+                  Checkout
+                </Button>
               </ListGroup.Item>
             </ListGroup>
           </Col>

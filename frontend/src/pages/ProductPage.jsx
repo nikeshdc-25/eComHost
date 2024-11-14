@@ -1,6 +1,6 @@
 import { Row, Col, ListGroup, Form } from "react-bootstrap";
 import Rating from "../components/Rating";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { addItem } from "../slices/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,7 +37,6 @@ function ProductPage() {
       setReviews(product.reviews);
     }
   }, [product]);
-
   const addReviewHandler = async (e) => {
     e.preventDefault();
     try {
@@ -57,7 +56,7 @@ function ProductPage() {
     dispatch(addItem(item));
     toast.success(`Added ${item.name} to your cart.`);
   };
-  
+
   const buyNowHandler = (item) => {
     dispatch(saveProductDetails(item));
     if (!userInfo) {
@@ -109,16 +108,59 @@ function ProductPage() {
                     <Col>{product.category}</Col>
                   </Row>
                 </ListGroup.Item>
+                {product.color.length > 0 && (
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>
+                        <strong>Color</strong>
+                      </Col>
+                      <Col>{product.color.join(", ")}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                )}
+                {product.nicotine.length > 0 && (
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>
+                        <strong>Nicotine</strong>
+                      </Col>
+                      <Col>{product.nicotine.join(", ")}mg</Col>
+                    </Row>
+                  </ListGroup.Item>
+                )}
+                {product.flavour.length > 0 && (
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>
+                        <strong>Flavour</strong>
+                      </Col>
+                      <Col>{product.flavour.join(", ")}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                )}
+                {product.properties && product.properties.length > 0 && (
+                  <>
+                    {product.properties.map((prop) => (
+                      <ListGroup.Item key={`${prop._id}-key`}>
+                        <Row>
+                          <Col>
+                            <strong>{prop.key}</strong>
+                          </Col>
+                          <Col>{prop.value}</Col>
+                        </Row>
+                      </ListGroup.Item>
+                    ))}
+                  </>
+                )}
                 <ListGroup.Item>
                   <Row>
                     <Col>
-                      <strong>Total Puffs</strong>
+                      <Rating
+                        value={product.rating}
+                        text={product.numReviews}
+                      />
                     </Col>
-                    <Col>N/A</Col>
                   </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Rating value={product.rating} text={product.numReviews} />
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <span>{product.description}</span>

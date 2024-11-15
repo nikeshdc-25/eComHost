@@ -162,9 +162,6 @@ function ProductPage() {
                     </Col>
                   </Row>
                 </ListGroup.Item>
-                <ListGroup.Item>
-                  <span>{product.description}</span>
-                </ListGroup.Item>
               </ListGroup>
             </Col>
             <Col md={3}>
@@ -258,8 +255,12 @@ function ProductPage() {
                 </ListGroup.Item>
               </ListGroup>
             </Col>
+            <hr className="my-3"/>
           </Row>
           <Row className="my-3">
+            <Col md={6}>
+            <b>{product.description}</b>
+            </Col>
             <Col md={6} className="reviews">
               <h2>Customer Reviews</h2>
               {reviews.length > 0 ? (

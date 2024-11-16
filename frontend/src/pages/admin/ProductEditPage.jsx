@@ -246,6 +246,7 @@ function ProductEditPage() {
               "brown",
               "purple",
               "green",
+              "black",
             ].map((value) => (
               <Form.Check
                 type="checkbox"

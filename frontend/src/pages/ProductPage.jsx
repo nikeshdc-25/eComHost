@@ -90,7 +90,16 @@ function ProductPage() {
             <Col md={4}>
               <ListGroup variant="flush">
                 <ListGroup.Item>
-                  <h3>{product.name}</h3>
+                  <h3
+                    style={{
+                      color: "green",
+                      background: "linear-gradient(to top, green, black)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
+                    {product.name}
+                  </h3>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Row>
@@ -128,23 +137,19 @@ function ProductPage() {
                     </Row>
                   </ListGroup.Item>
                 )}
-                {product.flavour.length > 0 && (
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>
-                        <strong>Flavour</strong>
-                      </Col>
-                      <Col>{product.flavour.join(", ")}</Col>
-                    </Row>
-                  </ListGroup.Item>
-                )}
+
                 {product.properties && product.properties.length > 0 && (
                   <>
                     {product.properties.map((prop) => (
                       <ListGroup.Item key={`${prop._id}-key`}>
                         <Row>
                           <Col>
-                            <strong>{prop.key}</strong>
+                            <strong>
+                              {/* This is for the capital letter and spaces as required based on the prop.key */}
+                              {prop.key
+                                .replace(/([A-Z])/g, " $1")
+                                .replace(/^./, (str) => str.toUpperCase())}{" "}
+                            </strong>
                           </Col>
                           <Col>{prop.value}</Col>
                         </Row>
@@ -167,6 +172,48 @@ function ProductPage() {
             <Col md={3}>
               <ListGroup>
                 <ListGroup.Item>
+                  {product.flavour.length > 0 && (
+                    <ListGroup.Item>
+                      <Row>
+                        <Col>
+                          <strong>Available Flavours:</strong>
+                          <ul
+                            style={{
+                              listStyleType: "none",
+                              paddingLeft: 0,
+                              margin: 0,
+                              marginTop: 8,
+                            }}
+                          >
+                            {product.flavour.map((flavour, index) => (
+                              <li
+                                key={index}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  marginBottom: "5px",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    width: "5px",
+                                    height: "5px",
+                                    borderRadius: "50%",
+                                    backgroundColor: "green",
+                                    display: "inline-block",
+                                    marginRight: "8px",
+                                  }}
+                                ></span>
+                                {flavour}
+                              </li>
+                            ))}
+                          </ul>
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  )}
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <Row>
                     <Col>Price</Col>
                     <Col>
@@ -178,7 +225,7 @@ function ProductPage() {
                           </s>{" "}
                           <b
                             className="discount"
-                            style={{ fontSize: "0.9rem" }}
+                            style={{ fontSize: "0.95rem" }}
                           >
                             {nepaliRupeesFormat(product.discountedPrice)}
                           </b>
@@ -255,12 +302,12 @@ function ProductPage() {
                 </ListGroup.Item>
               </ListGroup>
             </Col>
-            <hr className="my-3"/>
+            <hr className="my-3" />
           </Row>
           <Row className="my-3">
             <Col md={6}>
-            <h2>Description</h2>
-            <p>{product.description}</p>
+              <h2>Description</h2>
+              <p>{product.description}</p>
             </Col>
             <Col md={6} className="reviews">
               <h2>Customer Reviews</h2>

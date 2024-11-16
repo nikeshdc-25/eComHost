@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addOrder,
+  deleteOrder,
   getMyOrders,
   getOrderById,
   getOrders,
@@ -15,5 +16,6 @@ router.get("/myorders", authCheck, getMyOrders);
 router.put("/:id/updatestatus", authCheck, checkAdmin, updateOrderStatus);
 router.post("/addorder", authCheck, addOrder);
 router.get("/:id", authCheck, getOrderById);
+router.delete("/:id", authCheck, checkAdmin, deleteOrder);
 
 export default router;

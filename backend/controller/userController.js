@@ -151,6 +151,19 @@ const deleteUser = asyncHandler(async (req, res) => {
   res.send({ message: "User deleted Successfully!" });
 });
 
+const updateUserAdmin = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  let user = await User.findById(id);
+
+  if (!user) {
+    throw new ApiError(404, "User not found!");
+  }
+  // change admin status
+  user.isAdmin = !user.isAdmin;
+  await user.save();
+  res.send({ message: `User ${user.isAdmin ? "promoted to" : "demoted from"} admin!` });
+});
+
 export {
   signup,
   login,
@@ -160,4 +173,5 @@ export {
   updateProfile,
   updateUser,
   deleteUser,
+  updateUserAdmin,
 };

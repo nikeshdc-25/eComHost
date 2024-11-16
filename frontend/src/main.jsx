@@ -28,6 +28,7 @@ import OrdersPage from "./pages/admin/OrdersPage.jsx";
 import ProductsListPage from "./pages/admin/ProductsListPage.jsx";
 import ProductEditPage from "./pages/admin/ProductEditPage.jsx";
 import { HelmetProvider } from "react-helmet-async";
+import UsersPage from "./pages/admin/UsersPage.jsx";
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -87,6 +88,7 @@ const router = createBrowserRouter(
       <Route path="" element={<AdminRoute />}>
         <Route path="admin/orders" element={<OrdersPage />} />
         <Route path="admin/products" element={<ProductsListPage />} />
+        <Route path="admin/users" element={<UsersPage />} />
         <Route
           path="admin/products/page/:pageNumber"
           element={<ProductsListPage />}

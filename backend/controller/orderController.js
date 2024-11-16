@@ -54,4 +54,15 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
   res.send({ message: "Order status changed to " + order.status });
 });
 
-export { addOrder, getOrders, getOrderById, getMyOrders, updateOrderStatus };
+const deleteOrder = asyncHandler(async (req, res) => {
+  let id = req.params.id;
+  let order = await Order.findById(id);
+  if (order) {
+    await Order.findByIdAndDelete(id);
+    res.send({ message: "Order removed" });
+  } else {
+    throw new ApiError(404, "Order not found");
+  }
+});
+
+export { addOrder, getOrders, getOrderById, getMyOrders, updateOrderStatus, deleteOrder };

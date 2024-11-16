@@ -30,6 +30,24 @@ const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    updateUserAdmin: builder.mutation({
+      query: (id) => ({
+        url: `${USER_URL}/updateuseradmin/${id}`,
+        method: "PUT",
+      }),
+    }),
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `${USER_URL}/deleteuser/${id}`,
+        method: "DELETE",
+      }),
+    }),
+    getUser: builder.query({
+      query: () => ({
+        url: `${USER_URL}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -38,4 +56,7 @@ export const {
   useUserLogoutMutation,
   useUpdatedUserProfileMutation,
   useSignupMutation,
+  useUpdateUserAdminMutation,
+  useDeleteUserMutation,
+  useGetUserQuery,
 } = userApiSlice;

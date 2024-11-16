@@ -15,6 +15,13 @@ const orderSlice = apiSlice.injectEndpoints({
         url: `${ORDER_URL}/${id}`,
       }),
     }),
+    deleteOrder: builder.mutation({
+      query: (id) => ({
+        url: `${ORDER_URL}/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Order"],
+    }),
     getMyOrders: builder.query({
       query: () => ({
         url: `${ORDER_URL}/myorders`,
@@ -42,4 +49,5 @@ export const {
   useGetMyOrdersQuery,
   useGetAllOrdersQuery,
   useUpdateOrderStatusMutation,
+  useDeleteOrderMutation,
 } = orderSlice;

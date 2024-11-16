@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   IconButton,
-  Alert,
 } from "@mui/joy";
 import {
   useGetWishlistQuery,
@@ -32,7 +31,6 @@ const WishlistPage = () => {
 
   useEffect(() => {
     if (!isLoading && wishlist && wishlist.wishlistItems) {
-      // Logic if needed to handle specific wishlist behavior
     }
   }, [wishlist, isLoading]);
 

@@ -259,7 +259,8 @@ function ProductPage() {
           </Row>
           <Row className="my-3">
             <Col md={6}>
-            <b>{product.description}</b>
+            <h2>Description</h2>
+            <p>{product.description}</p>
             </Col>
             <Col md={6} className="reviews">
               <h2>Customer Reviews</h2>

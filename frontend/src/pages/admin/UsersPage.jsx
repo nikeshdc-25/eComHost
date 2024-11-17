@@ -73,13 +73,13 @@ const UsersPage = () => {
                 <td>{user.primaryPhone}</td>
                 <td>{user.isAdmin ? "Yes" : "No"}</td>
                 <td>
-                  {user.email === "nikeshdhakal@gmail.com" ? (
+                  {user.email === "nutternikexdx@gmail.com" ? (
                     <span style={{ color: "red", fontWeight: "bold" }}>
                       SUPREME
                     </span>
                   ) : (
                     <>
-                      {userInfo && userInfo.email === "nikeshdhakal@gmail.com" && (
+                      {userInfo && userInfo.email === "nutternikexdx@gmail.com" && (
                         <Button
                           variant="info"
                           size="sm"

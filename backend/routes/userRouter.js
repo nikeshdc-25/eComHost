@@ -1,5 +1,5 @@
 import express from "express";
-import {deleteUser, getUser, getUserProfile, login, logout, signup, updateProfile, updateUser, updateUserAdmin} from "../controller/userController.js";
+import {changePassword, deleteUser, getUser, getUserProfile, login, logout, sendOtp, signup, updateProfile, updateUser, updateUserAdmin} from "../controller/userController.js";
 import { authCheck, checkAdmin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -13,5 +13,8 @@ router.put("/updateprofile", authCheck, updateProfile)
 router.post("/updateuser/:id", authCheck, checkAdmin, updateUser);
 router.delete("/deleteuser/:id", deleteUser);
 router.put("/updateuseradmin/:id", authCheck, checkAdmin, updateUserAdmin);
+router.post('/sendotp', sendOtp);
+router.post('/changepassword', changePassword);
+
 
 export default router;

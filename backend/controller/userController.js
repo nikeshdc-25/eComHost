@@ -3,6 +3,7 @@ import createToken from "../utils/tokenUtil.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import ApiError from "../utils/apiError.js";
 import { isEmail, isPhone, isStrong } from "../utils/validator.js";
+import nodemailer from "nodemailer";
 // import bcrypt from "bcryptjs";
 
 //@desc register new user
@@ -49,15 +50,19 @@ const signup = asyncHandler(async (req, res, next) => {
 //route /api/v1/user/login
 //@access public
 const login = asyncHandler(async (req, res, next) => {
-  let { email, password } = req.body;
+  let { email, password, rememberMe } = req.body;
+
   let user = await User.findOne({ email });
   if (!user) {
     let err = new Error(`${email} is not registered!`);
     err.status = 400;
     throw err;
   }
+
   if (await user.matchPassword(password)) {
-    createToken(res, user._id);
+    let tokenExpiration = rememberMe ? '30d' : '7d';
+
+    createToken(res, user._id, tokenExpiration);
     res.send({
       message: "Login Successful!",
       user: {
@@ -126,6 +131,9 @@ const updateProfile = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc update user details
+//route /api/v1/user/updateuser/:id
+//@access private
 const updateUser = asyncHandler(async (req, res) => {
   let id = req.params.id;
   let user = await User.findById(id);
@@ -138,6 +146,9 @@ const updateUser = asyncHandler(async (req, res) => {
   } else throw new ApiError(404, "User not found!");
 });
 
+//@desc delete user
+//route /api/v1/user/deleteuser/:id
+//@access private
 const deleteUser = asyncHandler(async (req, res) => {
   let id = req.params.id;
   let user = await User.findById(id);
@@ -151,6 +162,9 @@ const deleteUser = asyncHandler(async (req, res) => {
   res.send({ message: "User deleted Successfully!" });
 });
 
+//@desc update admin status
+//route /api/v1/user/updateuseradmin/:id
+//@access private/admin only
 const updateUserAdmin = asyncHandler(async (req, res) => {
   const { id } = req.params;
   let user = await User.findById(id);
@@ -164,6 +178,77 @@ const updateUserAdmin = asyncHandler(async (req, res) => {
   res.send({ message: `User ${user.isAdmin ? "promoted to" : "demoted from"} admin!` });
 });
 
+//@desc update user password via email
+//route /api/v1/user/sentotp
+//@access private
+// sendOtp function remains the same
+const sendOtp = asyncHandler(async (req, res) => {
+  let { email } = req.body;
+  if (!isEmail(email)) {
+    throw new ApiError(404, "Invalid Email!");
+  }
+  let user = await User.findOne({ email });
+  if (!user) {
+    let err = new Error(`${email} is not registered!`);
+    err.status = 400;
+    throw err;
+  }
+  // Generate a 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  user.otp = otp;
+  user.otpExpires = Date.now() + 10 * 60 * 1000; // OTP expires in 10 minutes
+  await user.save();
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Your OTP for Authentication',
+    text: `Your OTP is: ${otp}`,
+  };
+  try {
+    await transporter.sendMail(mailOptions);
+    res.send({ message: `OTP sent to ${email}` });
+  } catch (error) {
+    throw new ApiError(500, "Failed to send OTP. Please try again later.");
+  }
+});
+
+
+// @desc Change password after OTP verification
+// @route POST /api/v1/user/changepassword
+// @access private
+const changePassword = async (req, res, next) => {
+  const { email, otp, newPassword } = req.body.data;
+  if (!email || !otp || !newPassword) {
+    return next(new ApiError(400, "Email, OTP, and New Password are required"));
+  }
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return next(new ApiError(404, "User not found"));
+    }
+    if (user.otp !== otp || user.otpExpires < Date.now()) {
+      return next(new ApiError(400, "Invalid or expired OTP"));
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.otp = undefined;
+    user.otpExpires = undefined;
+    await user.save();
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    return next(new ApiError(500, "Error changing password"));
+  }
+};
+
+
 export {
   signup,
   login,
@@ -174,4 +259,6 @@ export {
   updateUser,
   deleteUser,
   updateUserAdmin,
+  sendOtp,
+  changePassword,
 };

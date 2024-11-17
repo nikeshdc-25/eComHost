@@ -29,6 +29,7 @@ import ProductsListPage from "./pages/admin/ProductsListPage.jsx";
 import ProductEditPage from "./pages/admin/ProductEditPage.jsx";
 import { HelmetProvider } from "react-helmet-async";
 import UsersPage from "./pages/admin/UsersPage.jsx";
+import ForgotPasswordPage from "./pages/ForgetPaswordPage.jsx";
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -76,6 +77,7 @@ const router = createBrowserRouter(
       <Route path="product/:id" element={<ProductPage />} />
       <Route path="cart" element={<CartPage />} />
       <Route path="login" element={<LoginPage />} />
+      <Route path="forgetpass" element={<ForgotPasswordPage />} />
       <Route path="register" element={<RegisterPage />} />
       <Route path="" element={<PrivateRoute />}>
         <Route path="shipping" element={<ShippingPage />} />

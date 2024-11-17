@@ -48,6 +48,20 @@ const userApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    sendOtp: builder.mutation({
+      query: (data) => ({
+        url: `${USER_URL}/sendotp`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    changePassword: builder.mutation({
+      query: ({ data }) => ({
+        url: "/changepassword",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -59,4 +73,6 @@ export const {
   useUpdateUserAdminMutation,
   useDeleteUserMutation,
   useGetUserQuery,
+  useSendOtpMutation,
+  useChangePasswordMutation,
 } = userApiSlice;

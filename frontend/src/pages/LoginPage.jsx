@@ -1,6 +1,18 @@
 import { useState, useEffect } from "react";
-import { Box, TextField, Button, Typography, Container, Link as MuiLink, Avatar, InputAdornment, IconButton } from "@mui/material";
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Container,
+  Link as MuiLink,
+  Avatar,
+  InputAdornment,
+  IconButton,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../slices/userApiSlice";
 import { toast } from "react-toastify";
@@ -22,25 +34,25 @@ const LoginPage = () => {
   const source = sp.get("source") || "";
   const [showPassword, setShowPassword] = useState(false);
 
-const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const [rememberMe, setRememberMe] = useState(false);
 
-
-useEffect(() => {
-  if (userInfo) {
-    if (source === "CartPage") {
-      navigate("/shipping?source=CartPage");
-    } else if (source === "BuyNowPage") {
-      navigate("/shipping?source=BuyNowPage");
-    } else {
-      navigate(redirect);
+  useEffect(() => {
+    if (userInfo) {
+      if (source === "CartPage") {
+        navigate("/shipping?source=CartPage");
+      } else if (source === "BuyNowPage") {
+        navigate("/shipping?source=BuyNowPage");
+      } else {
+        navigate(redirect);
+      }
     }
-  }
-}, [userInfo, redirect, source, navigate]);
+  }, [userInfo, redirect, source, navigate]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      let resp = await login({ email, password }).unwrap();
+      let resp = await login({ email, password, rememberMe }).unwrap();
       dispatch(setCredentials(resp.user));
       toast.success(resp.message);
     } catch (err) {
@@ -58,16 +70,26 @@ useEffect(() => {
           mt: 8,
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "success.main"}}>
+        <Avatar sx={{ m: 1, bgcolor: "success.main" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 1, mb: 3 }}>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          align="center"
+          sx={{ mt: 1, mb: 3 }}
+        >
           Welcome, please sign in to continue
         </Typography>
-        <Box component="form" onSubmit={submitHandler} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={submitHandler}
+          noValidate
+          sx={{ mt: 1 }}
+        >
           <TextField
             margin="normal"
             required
@@ -101,6 +123,37 @@ useEffect(() => {
               ),
             }}
           />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  color="success"
+                />
+              }
+              label="Remember Me"
+            />
+            <MuiLink
+              component={Link}
+              to="/forgetpass"
+              variant="body2"
+              sx={{
+                fontWeight: "bold",
+                cursor: "pointer",
+                textDecoration: "none",
+                color: "success.main",
+              }}
+            >
+              Forget Password?
+            </MuiLink>
+          </Box>
           <Button
             type="submit"
             fullWidth

@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 const OrdersPage = () => {
   const { data: orders, isLoading, error, refetch  } = useGetAllOrdersQuery();
   const [deleteOrder] = useDeleteOrderMutation();
+  console.log(orders)
   const deleteOrderHandler = async (id) => {
     if (window.confirm("Are you sure you want to delete the order?")) {
       try {

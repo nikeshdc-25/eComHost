@@ -239,7 +239,7 @@ const changePassword = asyncHandler(async (req, res) => {
   if (isSamePassword) {
     throw new ApiError(400, "Please use different password from your current one!");
   }
-  if (!isStrong(password)) {
+  if (!isStrong(newPassword)) {
     throw new ApiError(
       404,
       "Must include 1 Uppercase, Symbols and 1 Number in your password!"
@@ -251,7 +251,7 @@ const changePassword = asyncHandler(async (req, res) => {
 
   let updatedUser = await user.save();
   res.send({
-    message: "Password updated successfully",
+    message: "Password Changed!",
   });
 });
 

@@ -5,6 +5,7 @@ import {
   useChangePasswordMutation,
   useSendOtpMutation,
 } from "../slices/userApiSlice";
+import {useNavigate} from 'react-router-dom';
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
@@ -13,10 +14,9 @@ const ForgotPasswordPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [timer, setTimer] = useState(0);
-  const [sendOtp] = useSendOtpMutation(); // Mutation hook for sending OTP
-  const [changePassword] = useChangePasswordMutation(); // Mutation hook for changing password
-
-  // Countdown timer for OTP resend
+  const [sendOtp] = useSendOtpMutation();
+  const [changePassword] = useChangePasswordMutation();
+  const navigate = useNavigate();
   useEffect(() => {
     let interval;
     if (timer > 0) {
@@ -29,10 +29,10 @@ const ForgotPasswordPage = () => {
   const handleSendOtp = async (e) => {
     e.preventDefault();
     try {
-      let resp = await sendOtp({ email }).unwrap(); // Sending email to the backend
+      let resp = await sendOtp({ email }).unwrap();
       setOtpSent(true);
-      setTimer(60); // Set timer for 1 minute
-      toast.success(resp.message); // Use response.message if available
+      setTimer(60);
+      toast.success(resp.message);
     } catch (err) {
       toast.error(err.data.error);
     }
@@ -49,8 +49,9 @@ const ForgotPasswordPage = () => {
         email,
         otp,
         newPassword,
-      }).unwrap(); // Sending OTP and new password to backend
+      }).unwrap();
       toast.success(resp.message);
+      navigate("/login");
     } catch (err) {
       toast.error(err.data.error);
     }

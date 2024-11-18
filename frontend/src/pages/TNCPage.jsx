@@ -1,12 +1,12 @@
 import React from 'react';
 import { Container, Typography, Box, Paper, Divider, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const TNCPage = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleClose = () => {
-    history.push('/');
+    navigate('/register');
   };
 
   return (

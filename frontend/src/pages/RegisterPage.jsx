@@ -1,5 +1,16 @@
 import { useState, useEffect } from "react";
-import { Button, Box, Typography, TextField, Stack, Container, InputAdornment, IconButton } from "@mui/material";
+import {
+  Button,
+  Box,
+  Typography,
+  TextField,
+  Stack,
+  Container,
+  InputAdornment,
+  Link as MuiLink,
+  IconButton,
+  FormControlLabel,
+} from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSignupMutation } from "../slices/userApiSlice";
 import { toast } from "react-toastify";
@@ -7,7 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "../slices/authSlice";
 import Avatar from "@mui/material/Avatar";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { CheckBox, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Checkbox } from "@mui/joy";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
@@ -23,9 +35,9 @@ const RegisterPage = () => {
   const sp = new URLSearchParams(search);
   const redirect = sp.get("redirect") || "/";
   const [showPassword, setShowPassword] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
-const handleClickShowPassword = () => setShowPassword(!showPassword);
-
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   useEffect(() => {
     if (userInfo) {
@@ -37,6 +49,10 @@ const handleClickShowPassword = () => setShowPassword(!showPassword);
     e.preventDefault();
     if (password !== confirmPassword) {
       toast.error("Password didn't match.");
+      return;
+    }
+    if (!termsAccepted) {
+      toast.error("You must agree to the Terms and Conditions.");
       return;
     }
     try {
@@ -55,7 +71,6 @@ const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   return (
     <Container maxWidth="xs">
-      {" "}
       <Box display="flex" flexDirection="column" alignItems="center" mb={2}>
         <Avatar sx={{ m: 1, bgcolor: "success.main" }}>
           <PersonAddAltOutlinedIcon />
@@ -121,7 +136,40 @@ const handleClickShowPassword = () => setShowPassword(!showPassword);
           onChange={(e) => setPrimaryPhone(e.target.value)}
           required
         />
-
+        <Stack direction="column" alignItems="center" sx={{ mt: 2 }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                color="success"
+              />
+            }
+            label={
+              <Typography variant="body2">
+                 I agree to the{" "}
+               <MuiLink
+              component={Link}
+              to="/termsandcondition"
+              variant="body2"
+              sx={{
+                fontWeight: "bold",
+                cursor: "pointer",
+                textDecoration: "none",
+                color: "success.main",
+              }}
+            >
+              Terms and Conditions
+            </MuiLink>
+              </Typography>
+            }
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+            }}
+          />
+        </Stack>
         <Button
           type="submit"
           fullWidth

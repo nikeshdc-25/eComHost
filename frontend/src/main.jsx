@@ -30,6 +30,7 @@ import ProductEditPage from "./pages/admin/ProductEditPage.jsx";
 import { HelmetProvider } from "react-helmet-async";
 import UsersPage from "./pages/admin/UsersPage.jsx";
 import ForgotPasswordPage from "./pages/ForgetPaswordPage.jsx";
+import TNCPage from "./pages/TNCPage.jsx";
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -57,6 +58,7 @@ import ForgotPasswordPage from "./pages/ForgetPaswordPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
+    <>
     <Route path="/" element={<App />}>
       <Route path="" element={<HomePage />} loader={dataLoader} />
       <Route
@@ -98,6 +100,8 @@ const router = createBrowserRouter(
         <Route path="admin/product/:id/edit" element={<ProductEditPage />} />
       </Route>
     </Route>
+    <Route path="/termsandcondition" element={<TNCPage />} />
+    </>
   )
 );
 

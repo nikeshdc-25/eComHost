@@ -45,15 +45,14 @@ const ForgotPasswordPage = () => {
         return;
       }
 
-      const response = await changePassword({
+      let resp = await changePassword({
         email,
         otp,
         newPassword,
       }).unwrap(); // Sending OTP and new password to backend
-      toast.success("Password changed successfully!");
-      // Redirect or show login form after successful password change
-    } catch (error) {
-      toast.error("Failed to change password. Please try again.");
+      toast.success(resp.message);
+    } catch (err) {
+      toast.error(err.data.error);
     }
   };
 

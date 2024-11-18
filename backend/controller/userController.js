@@ -4,7 +4,7 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import ApiError from "../utils/apiError.js";
 import { isEmail, isPhone, isStrong } from "../utils/validator.js";
 import nodemailer from "nodemailer";
-// import bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs";
 
 //@desc register new user
 //route /api/v1/user/signup
@@ -21,10 +21,8 @@ const signup = asyncHandler(async (req, res, next) => {
       "Must include 1 Uppercase, Symbols and 1 Number in your password!"
     );
   }
-  if(!isPhone(primaryPhone)){
-    throw new ApiError(
-      404, "Use valid phone number!"
-    );
+  if (!isPhone(primaryPhone)) {
+    throw new ApiError(404, "Use valid phone number!");
   }
   if (userExists) {
     let err = new Error(`User with email ${email} already exists!`);
@@ -60,7 +58,7 @@ const login = asyncHandler(async (req, res, next) => {
   }
 
   if (await user.matchPassword(password)) {
-    let tokenExpiration = rememberMe ? '30d' : '7d';
+    let tokenExpiration = rememberMe ? "30d" : "7d";
 
     createToken(res, user._id, tokenExpiration);
     res.send({
@@ -175,78 +173,87 @@ const updateUserAdmin = asyncHandler(async (req, res) => {
   // change admin status
   user.isAdmin = !user.isAdmin;
   await user.save();
-  res.send({ message: `User ${user.isAdmin ? "promoted to" : "demoted from"} admin!` });
+  res.send({
+    message: `User ${user.isAdmin ? "promoted to" : "demoted from"} admin!`,
+  });
 });
 
 //@desc update user password via email
 //route /api/v1/user/sentotp
 //@access private
-// sendOtp function remains the same
 const sendOtp = asyncHandler(async (req, res) => {
   let { email } = req.body;
   if (!isEmail(email)) {
-    throw new ApiError(404, "Invalid Email!");
+    throw new ApiError(400, "Invalid Email!");
   }
+
   let user = await User.findOne({ email });
   if (!user) {
-    let err = new Error(`${email} is not registered!`);
-    err.status = 400;
-    throw err;
+    throw new ApiError(400, `${email} is not registered!`);
   }
-  // Generate a 6-digit OTP
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
   user.otp = otp;
   user.otpExpires = Date.now() + 10 * 60 * 1000; // OTP expires in 10 minutes
   await user.save();
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: "sandbox.smtp.mailtrap.io",
+    port: 587,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: process.env.MAILTRAP_USER,
+      pass: process.env.MAILTRAP_PASS,
     },
   });
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: 'Your OTP for Authentication',
-    text: `Your OTP is: ${otp}`,
-  };
   try {
+    const mailOptions = {
+      from: "vapournepal@gmail.com",
+      to: email,
+      subject: "Your OTP for Authentication",
+      text: `Your OTP is: ${otp}`,
+      html: `<p>Your OTP is: ${otp}</p>`,
+    };
+
     await transporter.sendMail(mailOptions);
     res.send({ message: `OTP sent to ${email}` });
   } catch (error) {
-    throw new ApiError(500, "Failed to send OTP. Please try again later.");
+    console.error("Error sending email:", error);
+    throw new ApiError(500, "Failed to send OTP.");
   }
 });
-
 
 // @desc Change password after OTP verification
 // @route POST /api/v1/user/changepassword
 // @access private
-const changePassword = async (req, res, next) => {
-  const { email, otp, newPassword } = req.body.data;
+const changePassword = asyncHandler(async (req, res) => {
+  let { email, otp, newPassword } = req.body;
   if (!email || !otp || !newPassword) {
-    return next(new ApiError(400, "Email, OTP, and New Password are required"));
+    throw new ApiError(400, "Email, OTP, and New Password are required");
   }
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return next(new ApiError(404, "User not found"));
-    }
-    if (user.otp !== otp || user.otpExpires < Date.now()) {
-      return next(new ApiError(400, "Invalid or expired OTP"));
-    }
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
-    user.otp = undefined;
-    user.otpExpires = undefined;
-    await user.save();
-    res.status(200).json({ message: "Password updated successfully" });
-  } catch (error) {
-    return next(new ApiError(500, "Error changing password"));
+  let user = await User.findOne({ email });
+  if (!user) {
+    throw new ApiError(404, "User not found");
   }
-};
+  if (user.otp !== otp || user.otpExpires < Date.now()) {
+    throw new ApiError(400, "Invalid or expired OTP");
+  }
+  const isSamePassword = await bcrypt.compare(newPassword, user.password);
+  if (isSamePassword) {
+    throw new ApiError(400, "Please use different password from your current one!");
+  }
+  if (!isStrong(password)) {
+    throw new ApiError(
+      404,
+      "Must include 1 Uppercase, Symbols and 1 Number in your password!"
+    );
+  }
+  user.password = newPassword;
+  user.otp = undefined;
+  user.otpExpires = undefined;
+
+  let updatedUser = await user.save();
+  res.send({
+    message: "Password updated successfully",
+  });
+});
 
 
 export {

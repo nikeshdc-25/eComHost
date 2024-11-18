@@ -56,8 +56,8 @@ const userApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     changePassword: builder.mutation({
-      query: ({ data }) => ({
-        url: "/changepassword",
+      query: (data) => ({
+        url: `${USER_URL}/changepassword`,
         method: "POST",
         body: data,
       }),

@@ -30,6 +30,7 @@ function ProductPage() {
   const { data: product, isLoading, error } = useGetProductByIdQuery(id);
   const [addReview, { isLoading: reviewLoading }] = useAddReviewMutation();
   const { userInfo } = useSelector((state) => state.auth);
+  const shippingAddress = useSelector((state) => state.shippingAddress.shippingAddress);
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
@@ -63,10 +64,13 @@ function ProductPage() {
       navigate("/login", {
         state: { redirect: "/shipping", source: "BuyNowPage" },
       });
+    } else if (shippingAddress && Object.values(shippingAddress).length > 0) {
+      navigate("/buynow");
     } else {
       navigate("/shipping", { state: { source: "BuyNowPage" } });
     }
   };
+  
   return (
     <>
       {isLoading ? (

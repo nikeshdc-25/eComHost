@@ -10,6 +10,10 @@ import { useSelector } from "react-redux";
 import { FaEdit } from "react-icons/fa";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import esewaIcon from "../assets/esewasvg.png";
+import khaltiIcon from "../assets/khaltisvg.png";
+import { Button, CardActions, Typography } from "@mui/material";
+import { Avatar, Grid } from "@mui/joy";
 
 function OrderPage() {
   const [isEdit, setIsEdit] = useState(false);
@@ -30,6 +34,14 @@ function OrderPage() {
     }
   };
 
+  const handleEsewaPayment = () => {
+    window.location.href = `https://esewa.com.np/epay/main`;
+  };
+
+  const handleKhaltiPayment = () => {
+    window.location.href = `https://khalti.com/payment`;
+  };
+
   return isLoading ? (
     <h1>Loading...</h1>
   ) : error ? (
@@ -39,7 +51,8 @@ function OrderPage() {
       <Col md={8}>
         <ListGroup variant="flush">
           <ListGroup.Item>
-            <h3>Shipping</h3><hr></hr>
+            <h3>Shipping</h3>
+            <hr></hr>
             <p>
               Name: {order.shippingAddress.recipient}
               {order.shippingAddress.phone}
@@ -60,13 +73,16 @@ function OrderPage() {
           </ListGroup.Item>
           <ListGroup.Item>
             <h3>Payment</h3>
-            <p>Mode: COD</p>
+            <p>Mode: {order.paymentMethod || "Cash on Delivery"}</p>{" "}
             {order.isPaid ? (
-              <Message variant="success">Paid ${order.totalPrice}</Message>
+              <Message variant="success">
+                Paid ${order.totalPrice} via {order.paymentMethod}
+              </Message>
             ) : (
               <Message variant="danger">Not Paid</Message>
             )}
           </ListGroup.Item>
+
           <ListGroup.Item>
             {order.orderItems.map((item) => (
               <ListGroup.Item key={item._id}>
@@ -126,6 +142,7 @@ function OrderPage() {
                       <option>In Progress</option>
                       <option>Cancelled</option>
                       <option>Delivered</option>
+                      <option>Refunded</option>
                     </Form.Control>
                   ) : (
                     <Badge bg={orderStatusColor[order.status]}>
@@ -140,6 +157,50 @@ function OrderPage() {
                 )}
               </Row>
             </ListGroup.Item>
+            {!order.isPaid && (
+              <ListGroup.Item>
+                <Row>
+                  <Col>Payment Method</Col>
+                  <Col>
+                    <Grid container spacing={1}>
+                      <Grid item>
+                        <Button
+                          variant="contained"
+                          color="success"
+                          onClick={handleEsewaPayment}
+                          startIcon={
+                            <Avatar
+                              src={esewaIcon}
+                              alt="eSewa"
+                              sx={{ width: 30, height: 30, marginLeft: 1 }}
+                            />
+                          }
+                        ></Button>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            backgroundColor: "#8e44ad",
+                            "&:hover": {
+                              backgroundColor: "#732d91",
+                            },
+                          }}
+                          onClick={handleKhaltiPayment}
+                          startIcon={
+                            <Avatar
+                              src={khaltiIcon}
+                              alt="Khalti"
+                              sx={{ width: 30, height: 30, marginLeft: 1 }}
+                            />
+                          }
+                        ></Button>
+                      </Grid>
+                    </Grid>
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+            )}
           </ListGroup>
         </Card>
       </Col>

@@ -9,11 +9,16 @@ const shippingAddressSlice = createSlice({
   initialState,
   reducers: {
     saveShippingAddress: (state, action) => {
-        state.shippingAddress = action.payload;
-        localStorage.setItem("shippingAddress", JSON.stringify(state));
-      },
+      state.shippingAddress = action.payload;
+      localStorage.setItem("shippingAddress", JSON.stringify(state));
+    },
+    removeShippingAddress: (state) => {
+      state.shippingAddress = {};
+      localStorage.removeItem("shippingAddress");
+    },
+
   },
 });
 
-export const { saveShippingAddress } = shippingAddressSlice.actions;
+export const { saveShippingAddress, removeShippingAddress } = shippingAddressSlice.actions;
 export default shippingAddressSlice.reducer;

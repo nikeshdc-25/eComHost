@@ -51,10 +51,14 @@ const orderSchema = new mongoose.Schema(
     deliveredAt: {
       type: Date,
     },
+    paymentMethod:{
+      type: String,
+      enum: ["ESEWA", "KHALTI", "COD"],
+    },
     status: {
       type: String,
       default: "Pending",
-      enum: ["Pending", "In Progress", "Cancelled", "Delivered"],
+      enum: ["Pending", "In Progress", "Cancelled", "Delivered", "Refunded"],
     },
   },
   { timestamps: true }

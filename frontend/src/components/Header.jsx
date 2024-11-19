@@ -22,6 +22,7 @@ import { useUserLogoutMutation } from "../slices/userApiSlice";
 import SearchBox from "./SearchBox";
 import MarqueeBanner from "./MarqueeBanner";
 import { useState } from "react";
+import {removeShippingAddress} from "../slices/shippingAddressSlice";
 
 function Header() {
   const { cartItems } = useSelector((state) => state.cart);
@@ -35,6 +36,8 @@ function Header() {
     try {
       let res = await userLogout().unwrap();
       dispatch(logout());
+      dispatch(removeShippingAddress());
+      dispatch(removeShip)
       toast.warn(res.message);
       navigate("/login");
     } catch (err) {

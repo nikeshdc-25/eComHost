@@ -33,6 +33,7 @@ function Product({ product }) {
   const { data: wishlist, isLoading, refetch } = useGetWishlistQuery();
   const [addWishlist] = useAddWishlistMutation();
   const [removeWishlist] = useRemoveWishlistMutation();
+  const shippingAddress = useSelector((state) => state.shippingAddress.shippingAddress);
 
   const [isInWishlist, setIsInWishlist] = useState(false);
 
@@ -61,6 +62,8 @@ function Product({ product }) {
       navigate("/login", {
         state: { redirect: "/shipping", source: "BuyNowPage" },
       });
+    } else if (shippingAddress && Object.values(shippingAddress).length > 0) {
+      navigate("/buynow");
     } else {
       navigate("/shipping", { state: { source: "BuyNowPage" } });
     }
@@ -68,6 +71,10 @@ function Product({ product }) {
 
   const toggleWishlist = async () => {
     try {
+      if (!userInfo) {
+        toast.error("You need to log in.");
+        return;
+      }
       if (isInWishlist) {
         await removeWishlist(product._id);
         setIsInWishlist(false);

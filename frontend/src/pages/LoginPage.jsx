@@ -39,12 +39,15 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (userInfo) {
-      if (source === "CartPage") {
-        navigate("/shipping?source=CartPage");
-      } else if (source === "BuyNowPage") {
-        navigate("/shipping?source=BuyNowPage");
-      } else {
-        navigate(redirect);
+      switch (source) {
+        case "CartPage":
+          navigate("/shipping?source=CartPage");
+          break;
+        case "BuyNowPage":
+          navigate("/shipping?source=BuyNowPage");
+          break;
+        default:
+          navigate(redirect);
       }
     }
   }, [userInfo, redirect, source, navigate]);

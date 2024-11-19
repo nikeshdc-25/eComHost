@@ -10,6 +10,13 @@ const addProduct = asyncHandler(async (req, res) => {
 
   let categoryProperties = [];
   switch (category) {
+    case "Liquid":
+      categoryProperties = [
+        {
+          key: "size", value: "0ml"
+        },
+      ];
+      break;
     case "Pod":
       categoryProperties = [
         { key: "tankCapacity", value: "0ml" },
@@ -161,6 +168,16 @@ const updateProduct = asyncHandler(async (req, res) => {
     }, {});
 
     switch (req.body.category) {
+      case "Liquid":
+        categoryProperties = [{
+          key: "size",
+          value:
+          propertiesMap.size ||
+              product.properties?.find((p) => p.key === "size")
+                ?.value ||
+              "0ml",
+        }];
+        break;
       case "Pod":
         categoryProperties = [
           {

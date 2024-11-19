@@ -8,7 +8,7 @@ import { Row, Col, Button, Table, Form } from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Message from "../../components/Message";
 import { toast } from "react-toastify";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Paginate from "../../components/Paginate";
 import { nepaliRupeesFormat } from "../../utils/rupeesUtils";
 
@@ -18,14 +18,14 @@ const ProductsListPage = () => {
   const [addProduct, { isLoading: productLoading }] = useAddProductMutation();
   const [deleteProduct, { isLoading: deleteLoading }] =
     useDeleteProductMutation();
-
   const [category, setCategory] = useState(0);
-
+  const navigate = useNavigate();
   const addProductHandler = async (e) => {
     e.preventDefault();
     try {
       let resp = await addProduct({ category }).unwrap();
       toast.success(resp.message);
+      navigate(`/admin/product/${resp.product._id}/edit`);
     } catch (err) {
       toast.error(err.data.error);
     }

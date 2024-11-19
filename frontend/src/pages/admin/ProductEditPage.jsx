@@ -195,7 +195,7 @@ function ProductEditPage() {
           <>
             <Form.Group className="my-2">
               <Form.Label>Nicotine</Form.Label>
-              {["0", "3", "6", "9", "20", "30", "40", "50"].map((value) => (
+              {["0", "3", "6", "9", "20","25", "30", "35", "40", "45", "50"].map((value) => (
                 <Form.Check
                   type="checkbox"
                   key={value}

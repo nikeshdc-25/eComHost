@@ -14,6 +14,9 @@ const orderSchema = new mongoose.Schema(
         image: { type: String, required: true },
         price: { type: Number, required: true },
         discountedPrice: { type: Number, required: true },
+        color: { type: String, required: false },
+        flavour: { type: String, required: false },
+        nicotine: { type: Number, required: false }, 
         product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",

@@ -1,22 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Col, ListGroup, Row, Image, Card, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { useAddOrderMutation } from "../slices/orderSlice";
 import { toast } from "react-toastify";
 import { nepaliRupeesFormat } from "../utils/rupeesUtils";
+import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 
 function BuyNowPage() {
   const { productDetails, itemPrice, shippingCharge, totalPrice } = useSelector(
     (state) => state.buynow
   );
   const { shippingAddress } = useSelector((state) => state.shippingAddress);
+  const [selectedOptions, setSelectedOptions] = useState({});
   const [addOrder, { isLoading }] = useAddOrderMutation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const initialOptions = {
+      color: productDetails.color ? productDetails.color[0] : null,
+      flavour: productDetails.flavour ? productDetails.flavour[0] : null,
+      nicotine: productDetails.nicotine ? productDetails.nicotine[0] : null,
+    };
+    setSelectedOptions(initialOptions);
+  }, [productDetails]);
+
+  const handleSelectChange = (field, value) => {
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   const placeOrderHandler = async () => {
     try {
       let res = await addOrder({
-        orderItems: [productDetails],
+        orderItems: [
+          {
+            ...productDetails,
+            color: selectedOptions.color || null,
+            flavour: selectedOptions.flavour || null,
+            nicotine: selectedOptions.nicotine || null,
+          },
+        ],
         shippingAddress,
         itemPrice,
         shippingCharge,
@@ -28,14 +54,15 @@ function BuyNowPage() {
       toast.error(err.data.error);
     }
   };
+
   return (
     <Row>
       <Col md={8}>
         <ListGroup variant="flush">
           <ListGroup.Item>
             <h1>Shipping</h1>
-            <hr></hr>
-            <br /> <h3>User Details:</h3>
+            <hr />
+            <h3>User Details:</h3>
             <p>
               <strong>Name: </strong>
               {shippingAddress.recipient} <br />
@@ -54,30 +81,75 @@ function BuyNowPage() {
             </p>
           </ListGroup.Item>
           <ListGroup.Item>
-            <ListGroup.Item>
-              <Row>
-                <Col md={2}>
-                  <Image src={productDetails.image} fluid rounded />
-                </Col>
+            <Row>
+              <Col md={2}>
+                <Image src={productDetails.image} fluid rounded />
+              </Col>
+              <Col>
+                <Link to={`/product/${productDetails._id}`} className="nav-link">
+                  <strong>{productDetails.name}</strong>
+                </Link>
                 <Col>
-                  <Link
-                    to={`/product/${productDetails._id}`}
-                    className="nav-link"
-                  >
-                    <strong>{productDetails.name}</strong>
-                  </Link>
+                  {productDetails.color && productDetails.color.length > 1 && (
+                    <FormControl fullWidth margin="normal">
+                      <InputLabel id="color-select">Color</InputLabel>
+                      <Select
+                        labelId="color-select"
+                        value={selectedOptions.color || ""}
+                        label="Color"
+                        onChange={(e) => handleSelectChange("color", e.target.value)}
+                      >
+                        {productDetails.color.map((color) => (
+                          <MenuItem key={color} value={color}>
+                            {color}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  )}
+                  {productDetails.flavour && productDetails.flavour.length > 1 && (
+                    <FormControl margin="normal">
+                      <InputLabel id="flavour-select">Flavour</InputLabel>
+                      <Select
+                        labelId="flavour-select"
+                        value={selectedOptions.flavour || ""}
+                        label="Flavour"
+                        onChange={(e) => handleSelectChange("flavour", e.target.value)}
+                      >
+                        {productDetails.flavour.map((flavour) => (
+                          <MenuItem key={flavour} value={flavour}>
+                            {flavour}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  )}
+                  {productDetails.nicotine && productDetails.nicotine.length > 1 && (
+                    <FormControl fullWidth margin="normal" sx={{ width: '100px', marginLeft: "10px" }}>
+                      <InputLabel id="nicotine-select">Nicotine</InputLabel>
+                      <Select
+                        labelId="nicotine-select"
+                        value={selectedOptions.nicotine || ""}
+                        label="Nicotine"
+                        onChange={(e) => handleSelectChange("nicotine", e.target.value)}
+                      >
+                        {productDetails.nicotine.map((nicotine) => (
+                          <MenuItem key={nicotine} value={nicotine}>
+                            {nicotine}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  )}
                 </Col>
-                <Col>
-                  <strong>
-                    {productDetails.qty} X Rs.
-                    {nepaliRupeesFormat(productDetails.discountedPrice)} = Rs.
-                    {nepaliRupeesFormat(
-                      productDetails.qty * productDetails.discountedPrice
-                    )}
-                  </strong>
-                </Col>
-              </Row>
-            </ListGroup.Item>
+              </Col>
+              <Col md={3}>
+                <strong>
+                  {productDetails.qty} X Rs.{nepaliRupeesFormat(productDetails.discountedPrice)} = Rs.
+                  {nepaliRupeesFormat(productDetails.qty * productDetails.discountedPrice)}
+                </strong>
+              </Col>
+            </Row>
           </ListGroup.Item>
         </ListGroup>
       </Col>

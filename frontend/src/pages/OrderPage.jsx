@@ -12,8 +12,9 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import esewaIcon from "../assets/esewasvg.png";
 import khaltiIcon from "../assets/khaltisvg.png";
-import { Button, CardActions, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { Avatar, Grid } from "@mui/joy";
+import { nepaliRupeesFormat } from "../utils/rupeesUtils";
 
 function OrderPage() {
   const [isEdit, setIsEdit] = useState(false);
@@ -33,7 +34,7 @@ function OrderPage() {
       toast.error(err.data.error);
     }
   };
-
+  console.log(order);
   const handleEsewaPayment = () => {
     window.location.href = `https://esewa.com.np/epay/main`;
   };
@@ -76,13 +77,13 @@ function OrderPage() {
             <p>Mode: {order.paymentMethod || "Cash on Delivery"}</p>{" "}
             {order.isPaid ? (
               <Message variant="success">
-                Paid ${order.totalPrice} via {order.paymentMethod}
+                Paid Rs. {nepaliRupeesFormat(order.totalPrice)} via{" "}
+                {order.paymentMethod}
               </Message>
             ) : (
               <Message variant="danger">Not Paid</Message>
             )}
           </ListGroup.Item>
-
           <ListGroup.Item>
             {order.orderItems.map((item) => (
               <ListGroup.Item key={item._id}>
@@ -94,11 +95,40 @@ function OrderPage() {
                     <Link to={`/product/${item.product}`} className="nav-link">
                       <strong>{item.name}</strong>
                     </Link>
+                    <Row>
+                      <Col>
+                        {item.flavour && (
+                          <>
+                            <b>Flavour:</b> {item.flavour}
+                          </>
+                        )}{" "}
+                      </Col>
+                      <Row>
+                        <Col>
+                          {item.nicotine && (
+                            <>
+                              <b>Nicotine:</b> {item.nicotine}mg
+                            </>
+                          )}
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          {" "}
+                          {item.color && (
+                            <>
+                              <b>Color:</b> {item.color}
+                            </>
+                          )}
+                        </Col>
+                      </Row>
+                    </Row>
                   </Col>
-                  <Col>
+                  <Col md={3}>
                     <strong>
-                      {item.qty} X ${item.discountedPrice} = $
-                      {(item.qty * item.discountedPrice).toFixed(2)}
+                      {item.qty} X Rs.{nepaliRupeesFormat(item.discountedPrice)}{" "}
+                      = Rs.
+                      {nepaliRupeesFormat(item.qty * item.discountedPrice)}
                     </strong>
                   </Col>
                 </Row>
@@ -116,15 +146,15 @@ function OrderPage() {
             <ListGroup.Item>
               <Row>
                 <Col>Item</Col>
-                <Col>${order.itemPrice}</Col>
+                <Col>Rs. {nepaliRupeesFormat(order.itemPrice)}</Col>
               </Row>
               <Row>
                 <Col>Shipping</Col>
-                <Col>${order.shippingCharge}</Col>
+                <Col>Rs. {nepaliRupeesFormat(order.shippingCharge)}</Col>
               </Row>
               <Row>
                 <Col>Total</Col>
-                <Col>${order.totalPrice}</Col>
+                <Col>Rs. {nepaliRupeesFormat(order.totalPrice)}</Col>
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>

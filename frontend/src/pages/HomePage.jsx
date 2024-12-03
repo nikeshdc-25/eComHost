@@ -16,16 +16,14 @@ const HomePage = () => {
     pageNumber,
     keyword,
   });
+  const { data: latestData, isLoading: isLoadingLatest, error: errorLatest } =
+    useGetProductsQuery({ pageNumber: 1 });
 
   const [showScroll, setShowScroll] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.pageYOffset > 500) {
-        setShowScroll(true);
-      } else {
-        setShowScroll(false);
-      }
+      setShowScroll(window.pageYOffset > 500);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -40,28 +38,60 @@ const HomePage = () => {
       <Meta />
       {!keyword && <ProductCarousel />}
       {keyword ? (
-        <h2>Search Results for {keyword}</h2>
-      ) : (
-        <h2>Latest Products</h2>
-      )}
-      {isLoading ? (
-        <h1>Loading...</h1>
-      ) : error ? (
-        <Message variant="danger">{error?.data?.error || error.error}</Message>
+        <>
+          <h2>Search Results for {keyword}</h2>
+          {isLoading ? (
+            <h1>Loading...</h1>
+          ) : error ? (
+            <Message variant="danger">{error?.data?.error || error.error}</Message>
+          ) : (
+            <Row>
+              {data.products.map((product) => (
+                <Col xs={6} sm={6} md={4} lg={3} xl={3} key={product._id}>
+                  <Product product={product} />
+                </Col>
+              ))}
+            </Row>
+          )}
+        </>
       ) : (
         <>
-          <Row>
-            {data.products.map((product) => (
-              <Col xs={6} sm={6} md={4} lg={3} xl={3} key={product._id}>
-                <Product product={product} />
-              </Col>
-            ))}
-          </Row>
-          <Paginate
-            page={data.page}
-            pages={data.pages}
-            keyword={keyword ? keyword : ""}
-          />
+          <h2>Latest Products</h2>
+          {isLoadingLatest ? (
+            <h1>Loading...</h1>
+          ) : errorLatest ? (
+            <Message variant="danger">{errorLatest?.data?.error || errorLatest.error}</Message>
+          ) : (
+            <Row>
+              {latestData.products.map((product) => (
+                <Col xs={6} sm={6} md={4} lg={3} xl={3} key={product._id}>
+                  <Product product={product} />
+                </Col>
+              ))}
+            </Row>
+          )}
+
+          <h2>Browse Products</h2>
+          {isLoading ? (
+            <h1>Loading...</h1>
+          ) : error ? (
+            <Message variant="danger">{error?.data?.error || error.error}</Message>
+          ) : (
+            <>
+              <Row>
+                {data.products.map((product) => (
+                  <Col xs={6} sm={6} md={4} lg={3} xl={3} key={product._id}>
+                    <Product product={product} />
+                  </Col>
+                ))}
+              </Row>
+              <Paginate
+                page={data.page}
+                pages={data.pages}
+                keyword={keyword ? keyword : ""}
+              />
+            </>
+          )}
         </>
       )}
       {showScroll && (
@@ -69,7 +99,6 @@ const HomePage = () => {
           color="success"
           aria-label="scroll to top"
           onClick={scrollToTop}
-          className={showScroll ? "fab-hidden" : ""}
           style={{
             position: "fixed",
             bottom: 20,
@@ -86,11 +115,9 @@ const HomePage = () => {
     </>
   );
 };
-
 export const dataLoader = async () => {
   let resp = await fetch("/api/v1/products");
   let data = await resp.json();
   return data;
 };
-
 export default HomePage;

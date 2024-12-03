@@ -1,25 +1,43 @@
-import { Pagination } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+import { Pagination, PaginationItem } from "@mui/material";
+import { Link } from "react-router-dom";
 
 function Paginate({ page, pages, admin = false, keyword = "" }) {
   return (
     pages > 1 && (
-      <Pagination>
-        {[...Array(pages).keys()].map((x) => (
-          <LinkContainer
+      <Pagination
+        count={pages}
+        page={Number(page)}
+        variant="outlined"
+        shape="rounded"
+        sx={{
+          mt: 2,
+          display: "flex",
+          justifyContent: "center",
+          "& .Mui-selected": {
+            backgroundColor: "#198754",
+            color: "#fff",
+          },
+          "& .MuiPaginationItem-root": {
+            border: "1px solid #ddd",
+            "&:hover": {
+              backgroundColor: "#f0f0f0",
+            },
+          },
+        }}
+        renderItem={(item) => (
+          <PaginationItem
+            {...item}
+            component={Link}
             to={
               admin
-                ? `/admin/products/page/${x + 1}`
+                ? `/admin/products/page/${item.page}`
                 : keyword
-                ? `/search/${keyword}/page/${x + 1}`
-                : `/page/${x + 1}`
+                ? `/search/${keyword}/page/${item.page}`
+                : `/page/${item.page}`
             }
-            key={x + 1}
-          >
-            <Pagination.Item active={page == x + 1}>{x + 1}</Pagination.Item>
-          </LinkContainer>
-        ))}
-      </Pagination>
+          />
+        )}
+      />
     )
   );
 }
